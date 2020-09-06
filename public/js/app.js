@@ -137,10 +137,21 @@
 
 /***/ }),
 
-/***/ "./resources/sass/car_report.scss":
-/*!****************************************!*\
-  !*** ./resources/sass/car_report.scss ***!
-  \****************************************/
+/***/ "./resources/sass/car_reportBlank.scss":
+/*!*********************************************!*\
+  !*** ./resources/sass/car_reportBlank.scss ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./resources/sass/reportBlank.scss":
+/*!*****************************************!*\
+  !*** ./resources/sass/reportBlank.scss ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -149,15 +160,16 @@
 /***/ }),
 
 /***/ 0:
-/*!**********************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/car_report.scss ***!
-  \**********************************************************************************************/
+/*!*************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/car_reportBlank.scss ./resources/sass/reportBlank.scss ***!
+  \*************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\car_report.scss */"./resources/sass/car_report.scss");
+__webpack_require__(/*! D:\OSPanel\domains\secBase\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! D:\OSPanel\domains\secBase\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\OSPanel\domains\secBase\resources\sass\car_reportBlank.scss */"./resources/sass/car_reportBlank.scss");
+module.exports = __webpack_require__(/*! D:\OSPanel\domains\secBase\resources\sass\reportBlank.scss */"./resources/sass/reportBlank.scss");
 
 
 /***/ })

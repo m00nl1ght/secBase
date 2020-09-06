@@ -28,6 +28,9 @@ Route::get('/visitor/new', function () {
 
 Route::post('/visitor/submit', 'VisitorController@store')->name('visitor-add-form');
 Route::get('/visitor/index', 'VisitorController@index')->name('visitor-index');
+Route::get('/visitor/printBlank', function () {
+    return view('includes/visitor/reportBlank');
+})->name('visitor-printBlank');
 
 Route::get('/car/new', function () {
     return view('car')->with('page', 'new');
@@ -35,3 +38,6 @@ Route::get('/car/new', function () {
 
 Route::post('/car/submit', 'CarController@store')->name('car-add-form');
 Route::get('/car/index', 'CarController@index')->name('car-index');
+Route::get('/car/printBlank', function () {
+    return view('includes/car/reportBlank');
+})->name('car-printBlank');

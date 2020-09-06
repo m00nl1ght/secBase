@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/css/report_car.css">
+    <link rel="stylesheet" href="/css/car_reportBlank.css">
     <title>Пропуск авто</title>
 </head>
 </html>
@@ -16,7 +16,7 @@
 	</div>
 	<div class="page">
 		<div class="header">
-			<span>Пропуск для автотранспорта</span> <span class="number">№ {{ ticket }}</span>
+			<span>Пропуск для автотранспорта</span> <span class="number">№  ticket </span>
 			<img src="/images/claas-logo.svg"/>
 		</div>
 		<div class="divider"></div>
@@ -26,15 +26,15 @@
 				<table>
 					<tr>
 						<td>Автомобиль:<br/>(модель, гос. рег. знак)</td>
-						<td>{{ vehicle_license_plate }}</td>
+						<td> vehicle_license_plate </td>
 					</tr>
 					<tr>
 						<td>Водитель:<br/>(Фамилия И. О., № паспорта)</td>
-						<td>{{ driver_full_name }}</td>
+						<td> driver_full_name </td>
 					</tr>
 					<tr>
 						<td>Организация:<br/>(отправитель, перевозчик)</td>
-						<td>{{ contractor_name }}</td>
+						<td> contractor_name </td>
 					</tr>
 					<tr>
 						<td>Контактное лицо:<br/>(со стороны ООО "КЛААС")</td>
@@ -59,7 +59,7 @@
 						<th>Дата</th><th>Подпись водителя</th>
 					</tr>
 					<tr>
-						<td class="center">{{ date }} г.</td><td></td>
+						<td class="center"> date  г.</td><td></td>
 					</tr>
 				</table>
 				</div>
@@ -71,13 +71,13 @@
 						<th colspan=2>Прибытие</th>
 					</tr>
 					<tr>
-						<td>Дата</td><td>{{ date }} г.</td>
+						<td>Дата</td><td> date  г.</td>
 					</tr>
 					<tr>
-						<td>Время</td><td>{{ registration_time }}</td>
+						<td>Время</td><td> registration_time </td>
 					</tr>
 					<tr>
-						<td>Ф.И.О. сотрудника охраны</td><td>{{ security }}</td>
+						<td>Ф.И.О. сотрудника охраны</td><td> security </td>
 					</tr>
 				</table>
 				</div>
@@ -98,7 +98,7 @@
 				<table class="claas">
 					<caption>Отметки сотрудника ООО "КЛААС"</caption>
 					<tr>
-						<td>Место выгрузки:</td><td>{{ dock }}</td>
+						<td>Место выгрузки:</td><td> dock </td>
 					</tr>
 					<tr>
 						<td>Груз, количество мест:</td><td></td>
@@ -126,7 +126,7 @@
 	</div>
 	<div class="page">
 		<div class="center">
-			<img class="location-map" src="{{ location_map }}" />
+			<img class="location-map" src=" location_map " />
 		</div>
 		<div>
 			<div class="rules-header">Пожалуйста, соблюдайте правила пребывания на территории предприятия:</div>

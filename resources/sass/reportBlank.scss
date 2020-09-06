@@ -1,0 +1,149 @@
+$divider-color: #66cc00;
+
+@page {
+    margin: 0;
+}
+
+@media print {
+    // body {
+    //     width: 210mm;
+    // }
+
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+
+@media screen {
+    body {
+        background: #e0e0e0;
+    }
+    .page {
+        background: white;
+        box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        margin: 5mm auto;
+    }
+}
+
+body {
+    width: 210mm;
+    margin: 0 auto;
+    font-family: sans-serif;
+    font-size: 3.8mm;
+}
+
+.header {
+    padding: 10px 0;
+    border-bottom: solid #000000 1px;
+}
+
+    .header__button {
+        padding: 5px 10px;
+        font-size: 16px;
+    }
+
+.page {
+    padding: 5mm;
+    width: 210mm;
+    height: 147mm;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+
+    height: 110mm;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: 10mm;
+}
+
+    .title__head {
+        display: inline-block;
+
+        margin: 0;
+        
+        font-size: 4mm;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .title__img {
+        height: 8mm;
+    }
+
+.divider {
+    border-top: solid $divider-color 1.5mm;
+    height: 1mm;
+    border-bottom: solid $divider-color 1mm;
+    margin-bottom: 2mm;
+}
+
+.left-part {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 54%;
+}
+
+.right-part {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 45%;
+}
+
+.table-box {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .table-box__item {
+        border: solid black 2px;
+        padding: 1mm;
+    }
+
+    .table-box__item_w50 {
+        width: 50mm;;
+    }
+
+    .table-box__item_center {
+        text-align: center;
+    }
+
+    .table-box__item-head {
+        margin: 0;
+        font-size: 3.8mm;
+    }
+
+    .table-box__caption {
+        font-size: 4mm;
+        font-weight: bold;
+        margin-bottom: 0.5mm;
+    }
+
+.warning-message {
+    font-size: 4.2mm;
+    text-align: center;
+    border: solid black 2px;
+    padding: 1mm;
+}
+
+    .warning-message__text {
+        margin: 0;
+ 
+    }
+
+    .warning-message__img {
+        margin-top: 1mm;
+        width: 90mm;
+    }
