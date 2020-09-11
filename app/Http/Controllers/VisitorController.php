@@ -23,8 +23,17 @@ class VisitorController extends Controller
     public function index() {
         $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
         $visitorArr = $currentDate->incomevisitor;
-
-        return view('visitor', compact('visitorArr'))->with('page', 'index');
+        $showVisitorArr = [];
+        foreach($visitorArr as $arr) {
+            $showVisitorArr[] = [
+                'id' => $arr->id,
+                'surname' => $arr->visitor->surname,
+                'name' => $arr->visitor->name,
+                'time' => $arr->in_time,
+                'phone' => $arr->visitor->phone
+            ];
+        }
+        return view('visitor', compact('showVisitorArr'))->with('page', 'index');
     }
 
     /**

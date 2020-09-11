@@ -14,4 +14,8 @@ class Employee extends Model {
     public function incomecar() {
         return $this->hasMany('App\Models\Incomecar');
     }
+
+    public function incomecard() {
+        return $this->belongsToMany('App\Models\Incomecard');
+    }
 }

@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `number` int(11) DEFAULT NULL,
   `status` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `cars` (
   `number` varchar(50) DEFAULT NULL,
   `model` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `currentdates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `currentdate` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `dategroups` (
   PRIMARY KEY (`id`),
   KEY `FK_dategroups_dates` (`currentdate_id`),
   CONSTRAINT `FK_dategroups_dates` FOREIGN KEY (`currentdate_id`) REFERENCES `currentdates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `dategroup_security` (
   KEY `FK_dategroup_security_securities` (`security_id`),
   CONSTRAINT `FK_dategroup_security_dategroups` FOREIGN KEY (`dategroup_id`) REFERENCES `dategroups` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_dategroup_security_securities` FOREIGN KEY (`security_id`) REFERENCES `securities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -69,8 +69,23 @@ CREATE TABLE IF NOT EXISTS `dategroup_security` (
 CREATE TABLE IF NOT EXISTS `employees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL DEFAULT '0',
+  `position` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Экспортируемые данные не выделены.
+
+-- Дамп структуры для таблица secbase.employee_incomecard
+CREATE TABLE IF NOT EXISTS `employee_incomecard` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `incomecard_id` int(11) NOT NULL DEFAULT '0',
+  `employee_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `FK_employee_incomecard_incomecards` (`incomecard_id`),
+  KEY `FK_employee_incomecard_employees` (`employee_id`),
+  CONSTRAINT `FK_employee_incomecard_employees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`),
+  CONSTRAINT `FK_employee_incomecard_incomecards` FOREIGN KEY (`incomecard_id`) REFERENCES `incomecards` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -79,17 +94,23 @@ CREATE TABLE IF NOT EXISTS `firms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(250) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
 -- Дамп структуры для таблица secbase.incomecards
 CREATE TABLE IF NOT EXISTS `incomecards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `in_time` time DEFAULT NULL,
+  `out_time` time DEFAULT NULL,
   `card_id` int(11) DEFAULT NULL,
   `currentdate_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `FK_incomecards_cards` (`card_id`),
+  KEY `FK_incomecards_currentdates` (`currentdate_id`),
+  CONSTRAINT `FK_incomecards_cards` FOREIGN KEY (`card_id`) REFERENCES `cards` (`id`),
+  CONSTRAINT `FK_incomecards_currentdates` FOREIGN KEY (`currentdate_id`) REFERENCES `currentdates` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -111,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `incomecars` (
   CONSTRAINT `FK_incomecar_emploees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`),
   CONSTRAINT `FK_incomecar_securities` FOREIGN KEY (`security_id`) REFERENCES `securities` (`id`),
   CONSTRAINT `FK_incomecar_visitors` FOREIGN KEY (`visitor_id`) REFERENCES `visitors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -133,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `incomevisitors` (
   CONSTRAINT `FK_incomepeople_emploees` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`),
   CONSTRAINT `FK_incomepeople_securities` FOREIGN KEY (`security_id`) REFERENCES `securities` (`id`),
   CONSTRAINT `FK_incomepeople_visitors` FOREIGN KEY (`visitor_id`) REFERENCES `visitors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -152,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `securities` (
   `name` varchar(50) NOT NULL,
   `category` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 
@@ -170,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `visitors` (
   KEY `FK_visitors_cars` (`car_id`),
   CONSTRAINT `FK_visitors_cars` FOREIGN KEY (`car_id`) REFERENCES `cars` (`id`),
   CONSTRAINT `FK_visitors_firms` FOREIGN KEY (`firm_id`) REFERENCES `firms` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Экспортируемые данные не выделены.
 

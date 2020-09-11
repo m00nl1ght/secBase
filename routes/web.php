@@ -45,6 +45,7 @@ Route::get('/card/new', function () {
     return view('card')->with('page', 'new');
 })->name('card-new');
 Route::post('/card/submit', 'CardController@store')->name('card-add-form');
+Route::get('/card/index', 'CardController@index')->name('card-index');
 
 
 Route::get('/fault/new', function () {

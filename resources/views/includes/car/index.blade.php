@@ -14,17 +14,17 @@
             
         </thead>
         <tbody>
-            <?php foreach($carArr as $arr) { ?>
+            <?php foreach($showCarArr as $arr) { ?>
             <tr>
-                <td><?= $arr->visitor['surname'] ?></td>
-                <td><?= $arr->visitor['name'] ?></td>
-                <td><?= $arr->visitor['car']['number'] ?></td>
-                <td><?= $arr->visitor['phone'] ?></td>
-                <td><?= $arr->in_time ?></td>             
+                <td><?= $arr['surname'] ?></td>
+                <td><?= $arr['name'] ?></td>
+                <td><?= $arr['car_number'] ?></td>
+                <td><?= $arr['phone'] ?></td>
+                <td><?= $arr['time'] ?></td>             
                 <td>
                     <form action="#" name="out_car_form">
                         <div class="row justify-content-between">
-                            <input class="d-none" type="text" name="id" value="<?= $arr->id ?>">
+                            <input class="d-none" type="text" name="id" value="<?= $arr['id'] ?>">
                             <input type="time" name="out_time" placeholder="время выхода">
                             <button  class="btn btn-info col-4" type="submit">Вышел</button>
                         </div>  

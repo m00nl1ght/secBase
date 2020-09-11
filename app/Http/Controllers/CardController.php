@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Security;
+use App\Models\Currentdate;
+use App\Models\Card;
+use App\Models\Employee;
+use App\Models\Incomecard;
 
 class CardController extends Controller
 {
@@ -11,9 +16,36 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $showCardArr = [];
+
+        foreach($currentDate->incomecard as $arr) {
+            // $employee = [];
+            // foreach($arr->employee as $array){
+            //     $employee[] = $array->name;
+            // }
+
+            $showCardArr[] = [
+                'id' => $arr->id,
+                'card_number' => $arr->card['number'],
+                'time' => $arr->in_time,
+                'employee' => $arr->employee->first()->name
+            ];
+        }
+
+        return view('card', compact('showCardArr'))->with('page', 'index');
+        // $showCardArr = [];
+        // foreach($cardArr as $arr) {
+        //     $showVisitorArr[] = [
+        //         'id' => $arr->id,
+        //         'surname' => $arr->visitor->surname,
+        //         'name' => $arr->visitor->name,
+        //         'time' => $arr->in_time,
+        //         'phone' => $arr->visitor->phone
+        //     ];
+        // }
+        // 
     }
 
     /**
@@ -33,7 +65,38 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        dd($request);
+        $addIncCard = new Incomecard;
+        $addIncCard->in_time = date("H:i:s");
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentdate->incomecard()->save($addIncCard);
+
+        //employee
+        $addEmployee = Employee::where('name', '=', $request->employee)->first();
+
+        if($addEmployee === null) {
+            $addEmployee = new Employee;
+            $addEmployee->name = $request->employee;
+            $addEmployee->save();
+        }
+        $addEmployee->incomecard()->save($addIncCard);
+
+        //employee_boss
+        $addEmployeeBoss = Employee::where('name', '=', $request->employee_boss)->first();
+
+        if($addEmployeeBoss === null) {
+            $addEmployeeBoss = new Employee;
+            $addEmployeeBoss->name = $request->employee_boss;
+            $addEmployeeBoss->save();
+        }
+        $addEmployeeBoss->incomecard()->save($addIncCard);
+
+        //card
+        $addCard = Card::where('number', '=', $request->card_number)->first();
+        $addCard->status = true;
+        $addCard->save();
+        $addCard->incomecard()->save($addIncCard);
+
+        return redirect()->route('card-index')->with('success', 'Пропуск выдан');
     }
 
     /**

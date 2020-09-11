@@ -18,4 +18,8 @@ class Currentdate extends Model {
     public function incomecar() {
         return $this->hasMany('App\Models\Incomecar');
     }
+
+    public function incomecard() {
+        return $this->hasMany('App\Models\Incomecard');
+    }
 }

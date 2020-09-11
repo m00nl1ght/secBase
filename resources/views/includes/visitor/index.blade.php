@@ -13,16 +13,16 @@
             
         </thead>
         <tbody>
-            <?php foreach($visitorArr as $arr) { ?>
+            <?php foreach($showVisitorArr as $arr) { ?>
             <tr>
-                <td><?= $arr->visitor['surname'] ?></td>
-                <td><?= $arr->visitor['name'] ?></td>
-                <td><?= $arr->in_time ?></td>
-                <td><?= $arr->visitor['phone'] ?></td>
+                <td><?= $arr['surname'] ?></td>
+                <td><?= $arr['name'] ?></td>
+                <td><?= $arr['time'] ?></td>
+                <td><?= $arr['phone'] ?></td>
                 <td>
                     <form action="#" name="out_visitor_form">
                         <div class="row justify-content-between">
-                            <input class="d-none" type="text" name="id" value="<?= $arr->id ?>">
+                            <input class="d-none" type="text" name="id" value="<?= $arr['id'] ?>">
                             <input type="time" name="out_time" placeholder="время выхода">
                             <button  class="btn btn-info col-4" type="submit">Вышел</button>
                         </div>  

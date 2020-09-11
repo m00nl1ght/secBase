@@ -15,7 +15,7 @@
                 <a class="nav-link" href="{{ route('card-new') }}">Выдать</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">На территории</a>
+                <a class="nav-link" href="{{ route('card-index') }}">Выданные</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Отчет</a>

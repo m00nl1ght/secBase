@@ -22,7 +22,19 @@ class CarController extends Controller
         $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
         $carArr = $currentDate->incomecar;
 
-        return view('car', compact('carArr'))->with('page', 'index');
+        $showCarArr = [];
+        foreach($carArr as $arr) {
+            $showCarArr[] = [
+                'id' => $arr->id,
+                'surname' => $arr->visitor->surname,
+                'name' => $arr->visitor->name,
+                'car_number' => $arr->visitor->car->number,
+                'time' => $arr->in_time,
+                'phone' => $arr->visitor->phone
+            ];
+        }
+
+        return view('car', compact('showCarArr'))->with('page', 'index');
     }
 
     /**
