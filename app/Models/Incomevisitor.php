@@ -15,8 +15,8 @@ class Incomevisitor extends Model {
         return $this->belongsTo('App\Models\Security');
     }
 
-    public function emploee() {
-        return $this->belongsTo('App\Models\Emploee');
+    public function employee() {
+        return $this->belongsTo('App\Models\Employee');
     }
 
     public function currentdate() {

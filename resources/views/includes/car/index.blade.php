@@ -16,10 +16,10 @@
         <tbody>
             <?php foreach($carArr as $arr) { ?>
             <tr>
-                <td><?= $arr->visitor->surname ?></td>
-                <td><?= $arr->visitor->name ?></td>
-                <td><?= $arr->visitor->car->number ?></td>
-                <td><?= $arr->visitor->phone ?></td>
+                <td><?= $arr->visitor['surname'] ?></td>
+                <td><?= $arr->visitor['name'] ?></td>
+                <td><?= $arr->visitor['car']['number'] ?></td>
+                <td><?= $arr->visitor['phone'] ?></td>
                 <td><?= $arr->in_time ?></td>             
                 <td>
                     <form action="#" name="out_car_form">

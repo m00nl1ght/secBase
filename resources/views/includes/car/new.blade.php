@@ -64,9 +64,9 @@
     </div>
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="visitor_emploee">Сотрудник Клаас</label>
+        <label class="col-form-label col-4" for="visitor_employee">Сотрудник Клаас</label>
         <div class="col-6">
-            <input type="text" name="visitor_emploee" placeholder="Сотрудник Клаас" class="form-control">
+            <input type="text" name="visitor_employee" placeholder="Сотрудник Клаас" class="form-control">
         </div>
     </div>
 

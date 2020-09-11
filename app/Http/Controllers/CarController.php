@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use App\Models\Currentdate;
-use App\Models\Emploee;
+use App\Models\Employee;
 use App\Models\Firm;
 use App\Models\Incomecar;
 use App\Models\Security;
@@ -62,6 +62,7 @@ class CarController extends Controller
 
             //car
             $addCar = Car::where('number', '=', $request->visitor_carNumber)->first();
+
             if($addCar === null){
                 $addCar = new Car;
                 $addCar->number = $request->visitor_carNumber;
@@ -74,29 +75,52 @@ class CarController extends Controller
             $addFirm = Firm::where('name', '=', $request->visitor_firm)->first();
 
             if($addFirm === null) {
-                $addFirm = new Emploee;
+                $addFirm = new Employee;
                 $addFirm->name = $request->visitor_firm;
                 $addFirm->save();
             }
             $addFirm->visitor()->save($addVisitor);
         }
+  
+        else if ($addVisitor->car === null) {
+            $addCar = Car::where('number', '=', $request->visitor_carNumber)->first();
+
+            if($addCar === null){
+                $addCar = new Car;
+                $addCar->number = $request->visitor_carNumber;
+                $addCar->model = $request->visitor_carModel;
+                $addCar->save();
+            }
+            $addCar->visitor()->save($addVisitor);
+        }
         $addVisitor->incomecar()->save($addIncCar);
 
-        //emploee
-        $addEmploee = Emploee::where('name', '=', $request->visitor_emploee)->first();
+        //employee
+        $addEmployee = Employee::where('name', '=', $request->visitor_employee)->first();
 
-        if($addEmploee === null) {
-            $addEmploee = new Emploee;
-            $addEmploee->name = $request->visitor_emploee;
-            $addEmploee->save();
+        if($addEmployee === null) {
+            $addEmployee = new Employee;
+            $addEmployee->name = $request->visitor_employee;
+            $addEmployee->save();
         }
-        $addEmploee->incomecar()->save($addIncCar);
+        $addEmployee->incomecar()->save($addIncCar);
 
         //security
         $securityWriter = Currentdate::where('currentdate', date('Y-m-d'))->first()->dategroup->security->where('category', '=', 'writer')->first();
         $securityWriter->incomevisitor()->save($addIncCar);
-
-        return redirect()->route('car-index')->with('success', 'Авто добавлено');
+    
+        $printDataArr = [
+            'id' => $addIncCar->id,
+            'car_number' => $addVisitor->car->model . ' ' . $addVisitor->car->number,
+            'visitor' => $addVisitor->name . ' ' . $addVisitor->surname,
+            'firm' => $addVisitor->firm->name,
+            'employee' => $addEmployee->name,
+            'date' => $currentdate->currentdate,
+            'time' => $addIncCar->in_time,
+            'security' => $securityWriter->name
+        ];
+        return view('includes/car/reportBlank', compact('printDataArr'))->with('page', 'car');
+        // return redirect()->route('car-index')->with('success', 'Авто добавлено');
     }
 
     /**

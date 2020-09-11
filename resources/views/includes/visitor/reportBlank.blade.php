@@ -5,55 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/css/reportBlank.css">
-    <title>Пропуск посетитель</title>
+    <title>Пропуск автомобиль</title>
 </head>
 </html>
 
 <body>
-	<div class="no-print header">
-		<button class="header__button" onclick="window.print()">Печатать</button>
+    <div class="no-print page-header">
+        <button class="page-header__button" onclick="window.print()">Печатать</button>
+        <a href="{{ route('visitor-index') }}">Назад</a>
 	</div>
 	<div class="page">
 		<div class="title">
-            <h1 class="title__head">Пропуск для посетителя №</h1>
+            <h1 class="title__head">Пропуск для посетителя № <?= $printDataArr['id'] ?></h1>
 			<img class="title__img" src="/img/claas-logo.svg"/>
         </div>
         
         <div class="divider"></div>
         
-        <div class="container">
+        <div class="page-container">
             <div class="left-part">
                 <table class="table-box">
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">
-                            <h3 class="table-box__item-head">Автомобиль:</h3>
-                            <small>(модель, гос. рег. знак)</small>
+                            <h3 class="table-box__item-head">Посетитель:</h3>
+                            <!-- <small>(Фамилия И. О., № паспорта)</small> -->
                         </td>
-                        <td class="table-box__item"> vehicle_license_plate </td>
+                        <td class="table-box__item"><?= $printDataArr['visitor'] ?></td>
                     </tr>
 
-                    <tr>
-                        <td class="table-box__item table-box__item_w50">
-                            <h3 class="table-box__item-head">Водитель:</h3>
-                            <small>(Фамилия И. О., № паспорта)</small>
-                        </td>
-                        <td class="table-box__item"> driver_full_name </td>
-                    </tr>
-
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">
                             <h3 class="table-box__item-head">Организация:</h3>
-                            <small>(отправитель, перевозчик)</small>
+                            <!-- <small>(отправитель, перевозчик)</small> -->
                         </td>
-                        <td class="table-box__item"> contractor_name </td>
+                        <td class="table-box__item"><?= $printDataArr['firm'] ?></td>
                     </tr>
 
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">
                             <h3 class="table-box__item-head">Контактное лицо:</h3>
                             <small>(со стороны ООО "КЛААС")</small>
                         </td>
-                        <td class="table-box__item"></td>
+                        <td class="table-box__item"><?= $printDataArr['employee'] ?></td>
                     </tr>
                 </table>
 
@@ -66,15 +59,15 @@
 
         
                 <table class="table-box">
-                    <tr>
-                        <th class="table-box__item" colspan=2>с правилами ознакомлен</th>
+                    <tr class="table-box__row_h10">
+                        <th class="table-box__item table-box__item_center" colspan=2>с правилами ознакомлен</th>
                     </tr>
-                    <tr>
-                        <th class="table-box__item table-box__item_w50">Дата</th>
-                        <th class="table-box__item">Подпись водителя</th>
+                    <tr class="table-box__row_h10">
+                        <th class="table-box__item table-box__item_center table-box__item_w50">Дата</th>
+                        <th class="table-box__item table-box__item_center">Подпись водителя</th>
                     </tr>
-                    <tr>
-                        <td class="table-box__item table-box__item_center table-box__item_w50"> date  г.</td>
+                    <tr class="table-box__row_h10">
+                        <td class="table-box__item table-box__item_center table-box__item_w50"><?= $printDataArr['date'] ?></td>
                         <td class="table-box__item"></td>
                     </tr>
                 </table>
@@ -83,67 +76,50 @@
 
             <div class="right-part">
                 <table class="table-box">
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <th class="table-box__item" colspan=2>Прибытие</th>
                     </tr>
 
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Дата</td>
-                        <td class="table-box__item"> date  г.</td>
+                        <td class="table-box__item"><?= $printDataArr['date'] ?></td>
                     </tr>
 
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Время</td>
-                        <td class="table-box__item"> registration_time</td>
+                        <td class="table-box__item"><?= $printDataArr['time'] ?></td>
                     </tr>
 
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Ф.И.О. сотрудника охраны</td>
-                        <td class="table-box__item"> security </td>
+                        <td class="table-box__item"><?= $printDataArr['security'] ?></td>
                     </tr>
                 </table>
 
                 <table class="table-box">
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <th class="table-box__item" colspan=2>Убытие</th>
                     </tr>
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Время</td>
                         <td class="table-box__item"></td>
                     </tr>
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Ф.И.О. сотрудника охраны</td>
-                        <td class="table-box__item">Иванов</td>
+                        <td class="table-box__item"></td>
                     </tr>
                 </table>
 
                 <table class="table-box">
-                    <caption class="table-box__caption">Отметки сотрудника ООО "КЛААС"</caption>
-                    <tr>
-                        <td class="table-box__item table-box__item_w50">Место выгрузки:</td>
-                        <td class="table-box__item"> dock </td>
-                    </tr>
-                    <tr>
-                        <td class="table-box__item table-box__item_w50">Груз, количество мест:</td>
-                        <td class="table-box__item"></td>
-                    </tr>
-                    <tr>
-                        <td class="table-box__item table-box__item_w50">Разгрузку осуществил:</td>
-                        <td class="table-box__item"></td>
-                    </tr>
-                </table>
-    
-
-                <table class="table-box">
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Время убытия</td>
                         <td class="table-box__item"></td>
                     </tr>
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Ф.И.О. сотрудника<br/>ООО "КЛААС"</td>
-                        <td class="table-box__item">Петров</td>
+                        <td class="table-box__item"></td>
                     </tr>
-                    <tr>
+                    <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_w50">Подпись</td>
                         <td class="table-box__item"></td>
                     </tr>
@@ -153,9 +129,6 @@
     </div>
 
 	<div class="page">
-		<div class="center">
-			<img class="location-map" src=" location_map " />
-		</div>
 		<div>
 			<div class="rules-header">Пожалуйста, соблюдайте правила пребывания на территории предприятия:</div>
 			<ul class="rules-text">
@@ -170,5 +143,5 @@
 			</ul>
 		</div>
 		</div>
-</body>
+        </body>
 </html>

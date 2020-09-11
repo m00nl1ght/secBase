@@ -15,10 +15,10 @@
         <tbody>
             <?php foreach($visitorArr as $arr) { ?>
             <tr>
-                <td><?= $arr->visitor->surname ?></td>
-                <td><?= $arr->visitor->name ?></td>
+                <td><?= $arr->visitor['surname'] ?></td>
+                <td><?= $arr->visitor['name'] ?></td>
                 <td><?= $arr->in_time ?></td>
-                <td><?= $arr->visitor->phone ?></td>
+                <td><?= $arr->visitor['phone'] ?></td>
                 <td>
                     <form action="#" name="out_visitor_form">
                         <div class="row justify-content-between">
@@ -28,6 +28,7 @@
                         </div>  
                     </form>
                 </td>
+               
             </tr>
             <?php } ?>
         </tbody>

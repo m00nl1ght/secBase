@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Currentdate;
 use App\Models\Dategroup;
-use App\Models\Emploee;
+use App\Models\Employee;
 use App\Models\Firm;
 use App\Models\Incomevisitor;
 use App\Models\Security;
@@ -76,21 +76,31 @@ class VisitorController extends Controller
 
         $addFirm->visitor()->save($addVisitor);
 
-        //emploee
-        $addEmploee = Emploee::where('name', '=', $request->visitor_emploee)->first();
+        //employee
+        $addEmployee = Employee::where('name', '=', $request->visitor_employee)->first();
 
-        if($addEmploee === null) {
-            $addEmploee = new Emploee;
-            $addEmploee->name = $request->visitor_emploee;
-            $addEmploee->save();
+        if($addEmployee === null) {
+            $addEmployee = new Employee;
+            $addEmployee->name = $request->visitor_employee;
+            $addEmployee->save();
         }
-        $addEmploee->incomevisitor()->save($addIncVisitor);
+        $addEmployee->incomevisitor()->save($addIncVisitor);
 
         //security
         $securityWriter = Currentdate::where('currentdate', date('Y-m-d'))->first()->dategroup->security->where('category', '=', 'writer')->first();
         $securityWriter->incomevisitor()->save($addIncVisitor);
 
-        return redirect()->route('visitor-index')->with('success', 'Посетитель добавлен');
+        $printDataArr = [
+            'id' => $addIncVisitor->id,
+            'visitor' => $addVisitor->name . ' ' . $addVisitor->surname,
+            'firm' => $addFirm->name,
+            'employee' => $addEmployee->name,
+            'date' => $currentdate->currentdate,
+            'time' => $addIncVisitor->in_time,
+            'security' => $securityWriter->name
+        ];
+        // return redirect()->route('visitor-index')->with('success', 'Посетитель добавлен');
+        return view('includes/visitor/reportBlank', compact('printDataArr'))->with('page', 'visitor');
     }
 
     /**
