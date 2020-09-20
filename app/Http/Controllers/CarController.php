@@ -121,18 +121,9 @@ class CarController extends Controller
         $securityWriter = Currentdate::where('currentdate', date('Y-m-d'))->first()->dategroup->security->where('category', '=', 'writer')->first();
         $securityWriter->incomevisitor()->save($addIncCar);
     
-        $printDataArr = [
-            'id' => $addIncCar->id,
-            'car_number' => $addVisitor->car->model . ' ' . $addVisitor->car->number,
-            'visitor' => $addVisitor->name . ' ' . $addVisitor->surname,
-            'firm' => $addVisitor->firm->name,
-            'employee' => $addEmployee->name,
-            'date' => $currentdate->currentdate,
-            'time' => $addIncCar->in_time,
-            'security' => $securityWriter->name
-        ];
-        return view('includes/car/reportBlank', compact('printDataArr'))->with('page', 'car');
-        // return redirect()->route('car-index')->with('success', 'Авто добавлено');
+        $id =  $addIncCar->id;
+
+        return redirect()->route('car-print', $id);
     }
 
     /**
@@ -146,6 +137,22 @@ class CarController extends Controller
         //
     }
 
+    public function print($id) {
+        $printData = Incomecar::where('id', '=', $id)->first();
+
+        $printDataArr = [
+            'id' => $id,
+            'visitor' => $printData->visitor->name . ' ' . $printData->visitor->surname,
+            'car_number' => $printData->visitor->car->model . ' ' . $printData->visitor->car->number,
+            'firm' => $printData->visitor->firm->name,
+            'employee' => $printData->employee->name,
+            'date' => $printData->currentdate->currentdate,
+            'time' => $printData->in_time,
+            'security' => $printData->security->name
+        ];
+
+        return view('includes/car/reportBlank', compact('printDataArr'));
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -178,5 +185,17 @@ class CarController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function autoinsert(Request $request) {
+        if($request->key == "id") {
+            $resp =  Visitor::with('firm')
+            ->where('id', '=', $request->data)
+            ->first();
+        } elseif($request->key == "surname") {
+            $resp =  Visitor::where('surname', 'LIKE', $request->data . '%')->get();
+        } 
+
+        return $resp;
     }
 }

@@ -12,13 +12,10 @@
     <div class="navbar-collapse collapse" id="navbarcard" style="">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('card-new') }}">Выдать</span></a>
+                <a class="nav-link text-dark" href="{{ route('card-new') }}">Выдать</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('card-index') }}">Выданные</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Отчет</a>
+                <a class="nav-link text-dark" href="{{ route('card-index') }}">Выданные</a>
             </li>
         </ul>
     </div>

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -21,17 +20,17 @@ class VisitorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-        $visitorArr = $currentDate->incomevisitor;
+        $in = Incomevisitor::where('out_time', '=', null)->get();
+
         $showVisitorArr = [];
-        foreach($visitorArr as $arr) {
-            $showVisitorArr[] = [
-                'id' => $arr->id,
-                'surname' => $arr->visitor->surname,
-                'name' => $arr->visitor->name,
-                'time' => $arr->in_time,
-                'phone' => $arr->visitor->phone
-            ];
+        foreach($in as $arr) {
+                $showVisitorArr[] = [
+                    'id' => $arr->id,
+                    'surname' => $arr->visitor->surname,
+                    'name' => $arr->visitor->name,
+                    'time' => $arr->in_time,
+                    'phone' => $arr->visitor->phone
+                ];
         }
         return view('visitor', compact('showVisitorArr'))->with('page', 'index');
     }
@@ -99,17 +98,10 @@ class VisitorController extends Controller
         $securityWriter = Currentdate::where('currentdate', date('Y-m-d'))->first()->dategroup->security->where('category', '=', 'writer')->first();
         $securityWriter->incomevisitor()->save($addIncVisitor);
 
-        $printDataArr = [
-            'id' => $addIncVisitor->id,
-            'visitor' => $addVisitor->name . ' ' . $addVisitor->surname,
-            'firm' => $addFirm->name,
-            'employee' => $addEmployee->name,
-            'date' => $currentdate->currentdate,
-            'time' => $addIncVisitor->in_time,
-            'security' => $securityWriter->name
-        ];
-        // return redirect()->route('visitor-index')->with('success', 'Посетитель добавлен');
-        return view('includes/visitor/reportBlank', compact('printDataArr'))->with('page', 'visitor');
+        $id =  $addIncVisitor->id;
+
+        return redirect()->route('visitor-print', $id);
+        
     }
 
     /**
@@ -118,9 +110,37 @@ class VisitorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
+    }
+
+    public function print($id) {
+        $printData = Incomevisitor::where('id', '=', $id)->first();
+
+        $printDataArr = [
+            'id' => $id,
+            'visitor' => $printData->visitor->name . ' ' . $printData->visitor->surname,
+            'firm' => $printData->visitor->firm->name,
+            'employee' => $printData->employee->name,
+            'date' => $printData->currentdate->currentdate,
+            'time' => $printData->in_time,
+            'security' => $printData->security->name
+        ];
+
+        return view('includes/visitor/reportBlank', compact('printDataArr'));
+    }
+
+    public function exit(Request $request) {
+        $exitPeople = Incomevisitor::where('id', '=', $request->id)->first();
+
+        if($request->out_time !== null) {
+            $exitPeople->out_time = $request->out_time;
+        } else {
+            $exitPeople->out_time = date("H:i:s");
+        }
+        
+        $exitPeople->save();
+        return redirect()->route('visitor-index');
     }
 
     /**
@@ -155,5 +175,17 @@ class VisitorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function autoinsert(Request $request) {
+        if($request->key == "id") {
+            $resp =  Visitor::with('firm')
+            ->where('id', '=', $request->data)
+            ->first();
+        } elseif($request->key == "surname") {
+            $resp =  Visitor::where('surname', 'LIKE', $request->data . '%')->get();
+        } 
+
+        return $resp;
     }
 }

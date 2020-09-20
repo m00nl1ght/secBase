@@ -12,13 +12,13 @@
     <div class="navbar-collapse collapse" id="navbarsecurity" style="">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link text-secondary" href="{{ route('security-new') }}">Новая смена</span></a>
+                <a class="nav-link text-dark" href="{{ route('security-new') }}">Новая смена</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="{{ route('security-current') }}">Текущая смена</a>
+                <a class="nav-link text-dark" href="{{ route('security-current') }}">Текущая смена</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="#">Отчет</a>
+                <a class="nav-link text-dark" href="#">Отчет</a>
             </li>
         </ul>
     </div>

@@ -11,3 +11,7 @@
   margin: 0;
 }
 
+#autosubstitution {
+  z-index: 100;
+}
+

@@ -22,4 +22,12 @@ class Currentdate extends Model {
     public function incomecard() {
         return $this->hasMany('App\Models\Incomecard');
     }
+
+    public function fault() {
+        return $this->hasMany('App\Models\Fault');
+    }
+
+    public function incident() {
+        return $this->hasMany('App\Models\Incident');
+    }
 }

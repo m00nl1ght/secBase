@@ -93,11 +93,83 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$printButtonElem = document.querySelector('.js-print-button');
-$printButtonElem.addEventListener('click', function () {
-  $contentBox = document.querySelector('.js-content-box');
-  $contentBox.classList.remove('col-md-9');
-  window.print();
+var surnameElem = $("#visitor_surname");
+var nameElem = $("#visitor_name");
+var patronymicElem = $("#visitor_patronymic");
+var firmElem = $("#visitor_firm"); //отправка запроса
+
+var sendRequest = function sendRequest(key, data) {
+  var url = '';
+
+  if (window.location.pathname == '/visitor/new') {
+    url = "/visitor/autoinsert";
+  } else if (window.location.pathname == '/car/new') {
+    url = "/car/autoinsert";
+  }
+
+  var request = $.ajax({
+    url: url,
+    type: "POST",
+    data: {
+      "_token": $('meta[name="csrf-token"]').attr('content'),
+      "key": key,
+      "data": data
+    },
+    dataType: "json"
+  });
+  return request;
+}; //вставка в форму автоподстановки
+
+
+var insertIntoForm = function insertIntoForm(data) {
+  surnameElem.val(data.surname);
+  nameElem.val(data.name);
+  patronymicElem.val(data.patronymic);
+  $("#visitor_phone").val(data.phone);
+  firmElem.val(data.firm.name);
+};
+
+surnameElem.keyup(function () {
+  if (this.value.length >= 3) {
+    var resp = sendRequest('surname', this.value);
+    resp.done(function (response) {
+      $("#autosubstitution").empty();
+      response.forEach(function (element) {
+        //собираем варианты автоподстановки
+        var newElem = $('<li class="p-0 my-1 list-group-item"></li>');
+        var newElemForm = $("<form action=\"#\" method=\"post\" name=\"".concat(element.id, "\"></form"));
+        var newElemFormButton = $('<button class="w-100 btn btn-outline-secondary text-left" type="submit"></button>');
+        newElemFormButton.text("".concat(element.surname, " ").concat(element.name, " ").concat(element.patronymic));
+        newElemForm.append(newElemFormButton).submit(function () {
+          //обработчик форм автоподстановки
+          event.preventDefault();
+          var resp = sendRequest('id', $(this).attr('name'));
+          resp.done(function (response) {
+            insertIntoForm(response);
+          });
+        });
+        $("#autosubstitution").append(newElem.append(newElemForm)); //выводим собранные варианты на экран
+      });
+    });
+  }
+}); //показать варианты автоподскановки при фокусе
+
+surnameElem.focus(function () {
+  var insertElem = $('<ul id="autosubstitution" class="position-absolute w-100 m0 list-group bg-light"></ul>');
+  surnameElem.after(insertElem);
+}); //скрыть варианты автоподскановки при фокусе
+
+surnameElem.blur(function () {
+  setTimeout(function () {
+    $("#autosubstitution").remove();
+  }, 300);
+}); //инпуты с большой буквы
+
+var inputBigLetterElem = document.querySelectorAll(".capitalize");
+inputBigLetterElem.forEach(function (e) {
+  e.addEventListener("input", function () {
+    this.value = this.value[0].toUpperCase() + this.value.slice(1);
+  });
 });
 
 /***/ }),

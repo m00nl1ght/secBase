@@ -1,44 +1,44 @@
 <form action="{{ route('security-add-form')}}" method="post">
     @csrf
     <div class="form-group row">
-        <label class="col-form-label col-4" for="sec_main">Начальник смены</label>
+        <label class="col-form-label col-4" for="sec_main">Старший смены охраны</label>
         <div class="col-6">
-            <input type="text" name="sec_main" placeholder="Начальник смены" class="form-control">
+            <input type="text" name="sec_main" placeholder="Старший смены охраны" class="form-control capitalize">
         </div>
     </div>
 
     <div class="form-group row">        
-        <label class="col-form-label col-4" for="sec_writer">На пропусках</label>
+        <label class="col-form-label col-4" for="sec_writer">Инспектор пропускного режима</label>
         <div class="col-6">
-            <input type="text" name="sec_writer" placeholder="На пропусках" class="form-control">
+            <input type="text" name="sec_writer" placeholder="Инспектор пропускного режима" class="form-control capitalize">
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="sec_1">Сотрудник охраны 1</label>
+        <label class="col-form-label col-4" for="sec_1">Оператор видеонаблюдения</label>
         <div class="col-6">
-            <input type="text" name="sec_1" placeholder="Сотрудник охраны 1" class="form-control">
+            <input type="text" name="sec_1" placeholder="Оператор видеонаблюдения" class="form-control capitalize">
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="sec_2">Сотрудник охраны 2</label>
+        <label class="col-form-label col-4" for="sec_2">Ночная смена охраны 1</label>
         <div class="col-6">
-            <input type="text" name="sec_2" placeholder="Сотрудник охраны 2" class="form-control">
+            <input type="text" name="sec_2" placeholder="Ночная смена охраны 1" class="form-control capitalize">
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="sec_3">Сотрудник охраны 3</label>
+        <label class="col-form-label col-4" for="sec_3">Ночная смена охраны 2</label>
         <div class="col-6">
-            <input type="text" name="sec_3" placeholder="Сотрудник охраны 3" class="form-control">
+            <input type="text" name="sec_3" placeholder="Ночная смена охраны 2" class="form-control capitalize">
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="sec_4">Сотрудник охраны 4</label>
+        <label class="col-form-label col-4" for="sec_4">Резерв</label>
         <div class="col-6">
-            <input type="text" name="sec_4" placeholder="Сотрудник охраны 4" class="form-control">
+            <input type="text" name="sec_4" placeholder="Резерв" class="form-control capitalize">
         </div>
     </div>
 

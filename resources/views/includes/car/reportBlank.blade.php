@@ -10,9 +10,9 @@
 </html>
 
 <body>
-	<div class="no-print header-print">
-        <button class="header__button" onclick="window.print()">Печатать</button>
-        <a href="{{ route('car-index') }}">Назад</a>
+	<div class="no-print page-header">
+        <button class="page-header__button" onclick="window.print()">Печатать</button>
+        <a class="page-header__link" href="{{ route('car-index') }}">Назад</a>
 	</div>
 	<div class="page">
 		<div class="title">

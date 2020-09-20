@@ -12,7 +12,7 @@
 <body>
     <div class="no-print page-header">
         <button class="page-header__button" onclick="window.print()">Печатать</button>
-        <a href="{{ route('visitor-index') }}">Назад</a>
+        <a class="page-header__link" href="{{ route('visitor-index') }}">Назад</a>
 	</div>
 	<div class="page">
 		<div class="title">

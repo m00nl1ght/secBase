@@ -3,12 +3,12 @@
     <div class="form-group row">
         <label class="col-form-label col-4" for="system">Система</label>
         <div class="col-6">
-            <!-- <input type="text" name="system" placeholder="Система" class="form-control"> -->
             <select class="custom-select" name="system">
                 <option value="svn" selected>Видеонаблюдение</option>
                 <option value="op">Охрана периметра</option>
                 <option value="apc">Пожарная сигнализация</option>
                 <option value="skud">Контроль доступа</option>
+                <option value="another">Другое</option>
             </select>
         </div>
     </div>
