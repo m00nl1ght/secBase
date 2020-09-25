@@ -1,5 +1,4 @@
 @section('main_menu')
-
 <div class="sidebar-sticky">
   <ul class="nav flex-column py-1">
     <li class="d-flex align-items-center">

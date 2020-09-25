@@ -10,16 +10,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
+Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', function () {
     return view('home');
-})->name('home');
+});
 
 Route::get('/security/new', function () {
     return view('security')->with('page', 'new');
 })->name('security-new');
 Route::get('/security/current', 'SecurityController@current')->name('security-current');
 Route::post('/security/submit', 'SecurityController@submit')->name('security-add-form');
+Route::get('/security/report', 'SecurityController@report')->name('security-report');
 
 Route::get('/visitor/new', function () {
     return view('visitor')->with('page', 'new');
@@ -66,3 +69,4 @@ Route::get('/incident/update/{id}', 'IncidentController@update')->name('incident
 Route::get('/incident/show/{id}', 'IncidentController@show')->name('incident-show');
 Route::post('/incident/update/{id}', 'IncidentController@update')->name('incident-update');
 Route::get('/incident/destroy/{id}', 'IncidentController@destroy')->name('incident-destroy');
+

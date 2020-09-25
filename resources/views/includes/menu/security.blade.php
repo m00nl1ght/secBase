@@ -18,7 +18,7 @@
                 <a class="nav-link text-dark" href="{{ route('security-current') }}">Текущая смена</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="#">Отчет</a>
+                <a class="nav-link text-dark" href="{{ route('security-report') }}">Отчет</a>
             </li>
         </ul>
     </div>

@@ -52,7 +52,13 @@
     <div class="form-group row">
         <label class="col-form-label col-4" for="visitor_category">Категория</label>
         <div class="col-6">
-            <input type="text" name="visitor_category" placeholder="Категория" class="form-control">
+            <select class="custom-select" name="visitor_category">
+                <option value="visitor" selected>Подрядчик</option>
+                <option value="contractor">Отгружающий на склад</option>
+                <option value="businesstrip">Сервис</option>
+                <option value="businesstrip">Курьер\Доставка</option>
+                <option value="businesstrip">Посетитель</option>
+            </select>
         </div>
     </div>
 
