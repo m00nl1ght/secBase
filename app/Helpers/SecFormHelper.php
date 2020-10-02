@@ -35,8 +35,9 @@ function checkSec($req) {
         $currentDate->currentdate = date('Y-m-d');
         $currentDate->save();
     }
- 
+    
     $currentDate->dategroup()->save($addDategroup);
+   
     // $addDategroup->currentdate()->save($currentDate);
 
     if(!checkSecArr($security, $req->sec_main, $addDategroup)){
@@ -53,13 +54,13 @@ function checkSec($req) {
         checkSecArr($security, $req->sec_1, $addDategroup);
     }
     if($req->sec_2 !== null){
-        checkSecArr($security, $req->sec_1, $addDategroup);
+        checkSecArr($security, $req->sec_2, $addDategroup);
     }
     if($req->sec_3 !== null){
-        checkSecArr($security, $req->sec_1, $addDategroup);
+        checkSecArr($security, $req->sec_3, $addDategroup);
     }
     if($req->sec_4 !== null){
-        checkSecArr($security, $req->sec_1, $addDategroup);
+        checkSecArr($security, $req->sec_4, $addDategroup);
     }
     
 }

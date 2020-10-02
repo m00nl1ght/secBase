@@ -82,3 +82,38 @@ inputBigLetterElem.forEach(function(e) {
         this.value = this.value[0].toUpperCase() + this.value.slice(1);
       });
 });
+
+
+//чекбоксы
+const checkboxAllElem = document.querySelectorAll('input[type=checkbox]');
+
+for (let checkBox of checkboxAllElem) {
+    checkBox.addEventListener('click', (elem) => elem.target.toggleAttribute('checked') );
+  }
+
+    //группы чекбоксов
+const checkboxMainElem = document.querySelectorAll('.js-checkbox-main');
+
+checkboxMainElem.forEach((elem) => {
+    elem.addEventListener('click', (el) => {
+        checkboxElems = el.target.closest('.js-checkbox').querySelectorAll('.js-checkbox-sub');
+           
+        if(el.target.getAttribute('aria-checked') == 'false') {
+            el.target.setAttribute('aria-checked', 'true');
+
+            checkboxElems.forEach((elems) => {
+                elems.closest('label').classList.remove('text-secondary');
+                elems.removeAttribute('disabled');
+            });
+        } else {
+            el.target.setAttribute('aria-checked', 'false');
+
+            checkboxElems.forEach((elems) => {
+                elems.closest('label').classList.add('text-secondary');
+                elems.setAttribute('disabled', 'disabled');
+                elems.checked = false;
+                elems.removeAttribute('checked');
+            });
+        }
+    });
+});

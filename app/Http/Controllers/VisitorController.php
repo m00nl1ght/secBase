@@ -21,7 +21,7 @@ class VisitorController extends Controller
      */
     public function index() {
         $in = Incomevisitor::where('out_time', '=', null)->get();
-
+     
         $showVisitorArr = [];
         foreach($in as $arr) {
                 $showVisitorArr[] = [
@@ -32,6 +32,7 @@ class VisitorController extends Controller
                     'phone' => $arr->visitor->phone
                 ];
         }
+       
         return view('visitor', compact('showVisitorArr'))->with('page', 'index');
     }
 
@@ -40,9 +41,13 @@ class VisitorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        
+        if($currentdate == null) {
+            return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
+        }
+        return view('visitor')->with('page', 'new');
     }
 
     /**

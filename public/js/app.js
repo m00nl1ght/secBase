@@ -93,6 +93,12 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 var surnameElem = $("#visitor_surname");
 var nameElem = $("#visitor_name");
 var patronymicElem = $("#visitor_patronymic");
@@ -169,6 +175,48 @@ var inputBigLetterElem = document.querySelectorAll(".capitalize");
 inputBigLetterElem.forEach(function (e) {
   e.addEventListener("input", function () {
     this.value = this.value[0].toUpperCase() + this.value.slice(1);
+  });
+}); //чекбоксы
+
+var checkboxAllElem = document.querySelectorAll('input[type=checkbox]');
+
+var _iterator = _createForOfIteratorHelper(checkboxAllElem),
+    _step;
+
+try {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
+    var checkBox = _step.value;
+    checkBox.addEventListener('click', function (elem) {
+      return elem.target.toggleAttribute('checked');
+    });
+  } //группы чекбоксов
+
+} catch (err) {
+  _iterator.e(err);
+} finally {
+  _iterator.f();
+}
+
+var checkboxMainElem = document.querySelectorAll('.js-checkbox-main');
+checkboxMainElem.forEach(function (elem) {
+  elem.addEventListener('click', function (el) {
+    checkboxElems = el.target.closest('.js-checkbox').querySelectorAll('.js-checkbox-sub');
+
+    if (el.target.getAttribute('aria-checked') == 'false') {
+      el.target.setAttribute('aria-checked', 'true');
+      checkboxElems.forEach(function (elems) {
+        elems.closest('label').classList.remove('text-secondary');
+        elems.removeAttribute('disabled');
+      });
+    } else {
+      el.target.setAttribute('aria-checked', 'false');
+      checkboxElems.forEach(function (elems) {
+        elems.closest('label').classList.add('text-secondary');
+        elems.setAttribute('disabled', 'disabled');
+        elems.checked = false;
+        elems.removeAttribute('checked');
+      });
+    }
   });
 });
 

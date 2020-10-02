@@ -5,5 +5,9 @@
 @import 'variables';
 @import 'footer';
 @import 'autosubstitution';
+
+.big-container {
+    max-width: 1600px;
+}
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';

@@ -42,9 +42,14 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        
+        if($currentdate == null) {
+            return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
+        }
+
+        return view('car')->with('page', 'new');
     }
 
     /**

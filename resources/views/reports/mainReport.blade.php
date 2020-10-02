@@ -8,10 +8,10 @@
 
 @section('content')
     <div class="row">
-        <form class="d-flex justify-content-between" action="#">
+        <form class="d-flex justify-content-between" action="{{ route('security-report-post') }}">
             <input class="form-control" type="date" name="reportDate">
             <button class="btn btn-primary ml-5" type="submit">Показать&nbsp;отчет</button>
-        </form>     
+        </form>    
     </div>
 
     <h3 class="py-4">Дежурная сводка охраны за {{ $reportDay }} - {{ $reportDayTomorrow }} число</h3>

@@ -13,6 +13,16 @@ use App\Models\IncomeVisitor;
 use App\Models\IncomeCar;
 
 class SecurityController extends Controller {
+        /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create() {
+        return view('security')->with('page', 'new');
+    }
+
+
     public function submit(SecurityRequest $req) {
         checkSec($req);
         return redirect()->route('security-current')->with('success', 'Смена добавлена');
@@ -25,12 +35,17 @@ class SecurityController extends Controller {
         return view('security', compact('securityGuys'))->with('page', 'current');
      }
 
-     public function report() {
-        $reportDay = date('Y-m-d');
+     public function report(Request $request) {
+        if($request->has('reportDate')) {
+            $reportDay = $request->reportDate;
+        } else {
+            $reportDay = date('Y-m-d');
 
-        if(date("H:i") < '07:00') {
-            $reportDay = date('Y-m-d', strtotime('-1 days'));
-        } 
+            if(date("H:i") < '07:00') {
+                $reportDay = date('Y-m-d', strtotime('-1 days'));
+            }
+        }
+         
 
         $reportDayTomorrow = date("Y-m-d", strtotime($reportDay.'+ 1 days'));
 
@@ -40,16 +55,34 @@ class SecurityController extends Controller {
         $securityGuys = $currentDate->dategroup->security;
         $faults = Fault::where('out_date', '=',  null)->get();
 
+        // $incidents = Incident::where('currentdate_id', '=',  $currentDate->id)
+        //     ->where('in_time', '>=', '07:00:00')
+        //     ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
+        //     ->where('in_time', '<=', '07:00:00')
+        //     ->get();
         $incidents = Incident::where('currentdate_id', '=',  $currentDate->id)
             ->where('in_time', '>=', '07:00:00')
-            ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
-            ->where('in_time', '<=', '07:00:00')
+            ->orWhere(function($query) use ($currentDateTomorrow) {
+               if($currentDateTomorrow !== null) {
+                $query->where('currentdate_id', '=',  $currentDateTomorrow->id)
+                ->where('in_time', '<=', '07:00:00');
+               } 
+            })
             ->get();
 
+        // $visitors = IncomeVisitor::where('currentdate_id', '=',  $currentDate->id)
+        //     ->where('in_time', '>=', '07:00:00')
+        //     ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
+        //     ->where('in_time', '<=', '07:00:00')
+        //     ->get();
         $visitors = IncomeVisitor::where('currentdate_id', '=',  $currentDate->id)
             ->where('in_time', '>=', '07:00:00')
-            ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
-            ->where('in_time', '<=', '07:00:00')
+            ->orWhere(function($query) use ($currentDateTomorrow) {
+                if($currentDateTomorrow !== null) {
+                    $query->where('currentdate_id', '=',  $currentDateTomorrow->id)
+                    ->where('in_time', '<=', '07:00:00');
+                }
+            })
             ->get();
 
         $countPeopleArr = [];
@@ -65,11 +98,20 @@ class SecurityController extends Controller {
             }
         }
 
+        // $cars = IncomeCar::where('currentdate_id', '=',  $currentDate->id)
+        //     ->where('in_time', '>=', '07:00:00')
+        //     ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
+        //     ->where('in_time', '<=', '07:00:00')
+        //     ->get();
         $cars = IncomeCar::where('currentdate_id', '=',  $currentDate->id)
-            ->where('in_time', '>=', '07:00:00')
-            ->orWhere('currentdate_id', '=',  $currentDateTomorrow->id)
-            ->where('in_time', '<=', '07:00:00')
-            ->get();
+        ->where('in_time', '>=', '07:00:00')
+        ->orWhere(function($query) use ($currentDateTomorrow) {
+            if($currentDateTomorrow !== null) {
+                $query->where('currentdate_id', '=',  $currentDateTomorrow->id)
+                ->where('in_time', '<=', '07:00:00');
+            }
+        })
+        ->get();
 
         $countCarArr = [];
         $countCarArr['Всего'] = $cars->count();
@@ -91,7 +133,8 @@ class SecurityController extends Controller {
             'countPeopleArr',
             'countCarArr',
             'reportDay',
-            'reportDayTomorrow'
+            'reportDayTomorrow',
+            'request'
         ]));
      }
 }

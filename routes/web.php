@@ -17,16 +17,14 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/security/new', function () {
-    return view('security')->with('page', 'new');
-})->name('security-new');
+Route::get('/security/new', 'SecurityController@create')->name('security-new');
 Route::get('/security/current', 'SecurityController@current')->name('security-current');
 Route::post('/security/submit', 'SecurityController@submit')->name('security-add-form');
 Route::get('/security/report', 'SecurityController@report')->name('security-report');
+Route::post('/security/report', 'SecurityController@report')->name('security-report-post');
 
-Route::get('/visitor/new', function () {
-    return view('visitor')->with('page', 'new');
-})->name('visitor-new');
+
+Route::get('/visitor/new', 'VisitorController@create')->name('visitor-new');
 Route::post('/visitor/submit', 'VisitorController@store')->name('visitor-add-form');
 Route::get('/visitor/index', 'VisitorController@index')->name('visitor-index');
 Route::get('/visitor/print/{id}', 'VisitorController@print')->name('visitor-print');
@@ -34,9 +32,7 @@ Route::post('/visitor/exit', 'VisitorController@exit')->name('visitor-exit');
 Route::post('/visitor/autoinsert', 'VisitorController@autoinsert');
 
 
-Route::get('/car/new', function () {
-    return view('car')->with('page', 'new');
-})->name('car-new');
+Route::get('/car/new', 'CarController@create')->name('car-new');
 Route::post('/car/submit', 'CarController@store')->name('car-add-form');
 Route::get('/car/index', 'CarController@index')->name('car-index');
 // Route::get('/car/printBlank', function () {
@@ -70,3 +66,6 @@ Route::get('/incident/show/{id}', 'IncidentController@show')->name('incident-sho
 Route::post('/incident/update/{id}', 'IncidentController@update')->name('incident-update');
 Route::get('/incident/destroy/{id}', 'IncidentController@destroy')->name('incident-destroy');
 
+//Route для формы акта-допуска
+Route::get('/act/act_form', 'CheckboxController@create')->name('act-form');
+Route::post('/act/submit', 'CheckboxController@store')->name('act-store');
