@@ -6,32 +6,36 @@
     </div> 
 </div>
 
-<form class="py-4" method="POST" name="actForm" action="{{ route('act-store') }}">
+<form id="actForm" class="pt-4" method="POST" name="actForm" action="{{ route('act-store') }}">
     @csrf
     <fieldset class="mb-5">
         <legend class="h5">Основные данные</legend>
 
         <div class="form-group row">
-            <label class="col-form-label col-4" for="nameEmployee">Представитель КЛААС</label>
+            <label class="col-form-label col-4" for="surnameEmployee">Представитель КЛААС</label>
             <div class="col-6">
                 <input class="form-control" type="text"
-                        name="nameEmployee"
+                        name="surnameEmployee"
                         id="nameEmployee"
-                        placeholder="ФИО">
+                        placeholder="Фамилия">
+                <input class="form-control" type="text" name="nameEmployee" placeholder="Имя">
+                <input class="form-control" type="text" name="patronymicEmployee" placeholder="Отчество">
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-form-label col-4" for="nameContractor">Представитель подрядной организации</label>
+            <label class="col-form-label col-4" for="surnameContractor">Представитель подрядной организации</label>
             <div class="col-6">
-                <input class="form-control" type="text" name="nameContractor" id="nameContractor" placeholder="ФИО">
+                <input class="form-control" type="text" name="surnameContractor" id="nameContractor" placeholder="Фамилия">
+                <input class="form-control" type="text" name="nameContractor" placeholder="Имя">
+                <input class="form-control" type="text" name="patronymicContractor" placeholder="Отчество">
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-form-label col-4" for="organization">Организация исполнителя</label>
+            <label class="col-form-label col-4" for="firm">Организация исполнителя</label>
             <div class="col-6">
-                <input class="form-control" type="text" name="organization" id="organization">
+                <input class="form-control" type="text" name="firm" id="firm">
             </div>
         </div>
 
@@ -100,7 +104,7 @@
         </div>
     </fieldset>
 
-    <fieldset class="form-group mb-5 py-3">
+    <fieldset class="form-group mb-5 py-3" name="maincheckbox" form="actForm">
         <legend class="h5 m-0">Тип выполняемых работ</legend>
         <div class="row d-flex justify-content-between">
         @foreach($main as $arr=>$key)

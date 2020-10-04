@@ -67,5 +67,5 @@ Route::post('/incident/update/{id}', 'IncidentController@update')->name('inciden
 Route::get('/incident/destroy/{id}', 'IncidentController@destroy')->name('incident-destroy');
 
 //Route для формы акта-допуска
-Route::get('/act/act_form', 'CheckboxController@create')->name('act-form');
-Route::post('/act/submit', 'CheckboxController@store')->name('act-store');
+Route::get('/act/act_form', 'ActController@create')->name('act-form');
+Route::post('/act/submit', 'ActController@store')->name('act-store');

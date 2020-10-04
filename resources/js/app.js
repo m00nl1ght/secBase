@@ -89,7 +89,7 @@ const checkboxAllElem = document.querySelectorAll('input[type=checkbox]');
 
 for (let checkBox of checkboxAllElem) {
     checkBox.addEventListener('click', (elem) => elem.target.toggleAttribute('checked') );
-  }
+}
 
     //группы чекбоксов
 const checkboxMainElem = document.querySelectorAll('.js-checkbox-main');

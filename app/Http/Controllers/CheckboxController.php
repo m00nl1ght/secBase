@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Checkbox;
+
 use Illuminate\Http\Request;
 
 class CheckboxController extends Controller
@@ -23,37 +24,7 @@ class CheckboxController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $checkboxArr = Checkbox::all();
 
-        $main = [];
-        foreach($checkboxArr as $arr) {
-            if($arr->category == 'head') {
-                $id = $arr->id;
-                $name = $arr->description;
-
-                foreach($checkboxArr as $arr) {
-                    if($id == $arr->parent_id && $arr->category == 'main') {
-                        $main[$name][$arr->name] = $arr->description;
-                    }
-                }
-            }
-        }
-
-        $sub = [];
-        foreach($checkboxArr as $arr) {
-            if($arr->category == 'head') {
-                $id = $arr->id;
-                $name = $arr->description;
-
-                foreach($checkboxArr as $arr) {
-                    if($id == $arr->parent_id && $arr->category == 'sub') {
-                        $sub[$name][$arr->name] = $arr->description;
-                    }
-                }
-            }
-        }
-
-        return view('includes/act/main', compact(['main', 'sub']));
     }
 
     /**
@@ -63,7 +34,7 @@ class CheckboxController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        dd($request);
+
     }
 
     /**
