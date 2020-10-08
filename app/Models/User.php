@@ -3,12 +3,18 @@
 namespace App\Models;
 
 use App\Traits\HasRolesAndPermissions;
+// use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
+// class User extends Model implements Authenticatable
 {
+    // public function approves() {
+    //     return $this->belongsToMany('App\Models\Approve');
+    // }
+
     use Notifiable, HasRolesAndPermissions; //новый трейт
 
     /**

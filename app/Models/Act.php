@@ -16,4 +16,8 @@ class Act extends Model {
     public function visitor() {
         return $this->belongsTo('App\Models\Visitor');
     }
+
+    public function approve() {
+        return $this->hasMany('App\Models\Approve');
+    }
 }

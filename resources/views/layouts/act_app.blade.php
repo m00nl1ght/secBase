@@ -10,15 +10,20 @@
     @yield('style-block')
     <title>@yield('title-block')</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
-    @include('includes.header')
+<body class="d-flex flex-column min-vh-100"> 
+    @include('includes.header')  
+
     <main role="main" class="container-fluid py-4 mx-auto big-container">
         <div class="row">
             <nav class="col-md-2 d-md-block bg-light sidebar">
-                @include('includes.act.menu')
+                @role('act')
+                    @include('includes.act.menu')
+                @endrole
             </nav>
             <div class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            @role('act')
                 @yield('content')
+            @endrole
             </div>   
         </div>
     </main>

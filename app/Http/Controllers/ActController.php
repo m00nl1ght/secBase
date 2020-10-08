@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Act;
+use App\Models\Approve;
 use App\Models\Checkbox;
 use App\Models\Employee;
 use App\Models\Firm;
 use App\Models\Visitor;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActController extends Controller
 {
@@ -17,9 +19,35 @@ class ActController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+        $acts = Act::where('status', 'new')->get();
+        $approve = [];
+
+        foreach($acts as $act) {          
+            foreach($act->approve as $arr){         
+                foreach($arr->user->roles as $array) {
+                    if($array->slug == 'sto'){
+                        $approve[$act->id][$array->slug] = $arr->approval;
+                    } elseif($array->slug == 'sd') {
+                        $approve[$act->id][$array->slug] = $arr->approval;
+                    } elseif($array->slug == 'cc') {
+                        $approve[$act->id][$array->slug] = $arr->approval;
+                    }
+                }
+    
+                if(!array_key_exists('sto', $approve[$act->id])){
+                    $approve[$act->id]['sto'] = 'n/a';
+                }
+                if(!array_key_exists('sd', $approve[$act->id])){
+                    $approve[$act->id]['sd'] = 'n/a';
+                }
+                if(!array_key_exists('cc', $approve[$act->id])){
+                    $approve[$act->id]['cc'] = 'n/a';
+                }   
+            }
+        }
+
+        return view('includes/act/main', compact(['acts', 'approve']))->with('page', 'index');;
     }
 
     /**
@@ -34,7 +62,7 @@ class ActController extends Controller
         foreach($checkboxArr as $arr) {
             if($arr->category == 'head') {
                 $id = $arr->id;
-                $name = $arr->description;
+                $name = $arr->name;
 
                 foreach($checkboxArr as $arr) {
                     if($id == $arr->parent_id && $arr->category == 'main') {
@@ -48,7 +76,7 @@ class ActController extends Controller
         foreach($checkboxArr as $arr) {
             if($arr->category == 'head') {
                 $id = $arr->id;
-                $name = $arr->description;
+                $name = $arr->name;
 
                 foreach($checkboxArr as $arr) {
                     if($id == $arr->parent_id && $arr->category == 'sub') {
@@ -58,7 +86,7 @@ class ActController extends Controller
             }
         }
 
-        return view('includes/act/main', compact(['main', 'sub']));
+        return view('includes/act/main', compact(['main', 'sub', 'checkboxArr']))->with('page', 'new');
     }
 
     /**
@@ -72,6 +100,7 @@ class ActController extends Controller
         $act->place = $request->place;
         $act->description = $request->description;
         $act->instrument = $request->instrument;
+        $act->status = 'new';
         $act->from_time = $request->timeFrom;
         $act->till_time = $request->timeTill;
         $act->from_date = $request->dateFrom;
@@ -125,7 +154,24 @@ class ActController extends Controller
         $addEmployee->act()->save($act);
         $addVisitor->act()->save($act);
 
-        dd($request);
+        //сохраняем выбранные чекбоксы
+        $checkbox = Checkbox::select('id','name')->get();
+        
+        foreach($checkbox as $array) {
+            if($request->has($array->name)){
+                $array->act()->save($act);
+            }
+            
+        }
+
+        //сохраняем таблицу согласования
+        $approve = new Approve;
+        $approve->user_id = Auth::id();
+        $approve->act_id = $act->id;
+        $approve->approval = 'owner';
+        $approve->save();
+        
+        return redirect()->route('act-index');
     }
 
     /**
@@ -157,9 +203,50 @@ class ActController extends Controller
      * @param  \App\Act  $act
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Act $act)
-    {
-        //
+    public function update(Request $request, $id) {
+        $act = Act::where('id', $id)->first();   
+        $currentApprove = $act->approve->where('user_id', '=', Auth::user()->id)->first();
+    
+        if($currentApprove == null) {
+            $currentApprove = new Approve;
+            $currentApprove->user_id = Auth::id();
+            $currentApprove->act_id = $id;
+            $currentApprove->approval = $request->approve;
+            $currentApprove->save();
+        } else {
+            $currentApprove->approval = $request->approve;
+            $currentApprove->update();
+        }
+
+        //проверка конечного статуса
+        $checkStatus = function($approve) {
+            $status = [
+                'sto' => false,
+                'cc' => false,
+                'sd' => false
+            ];
+
+            foreach($approve as $arr) {
+                if($arr->approval == 'approve' || $arr->approval == 'owner') {
+                    foreach($arr->user->roles as $roles) {
+                        if($roles->slug == 'sto' || $roles->slug == 'cc' || $roles->slug == 'sd') {
+                            $status[$roles->slug] = true;
+                        }
+                    }
+                }
+            }
+            return $status;
+        };
+      
+        $approve = Act::where('id', $id)->first()->approve; 
+        $checkStatusArr = $checkStatus($approve);
+
+        if($checkStatusArr['sto'] && $checkStatusArr['cc'] && $checkStatusArr['sd']) {
+            $act->status = 'approval';
+            $act->update();
+        }
+
+        return redirect()->route('act-index');
     }
 
     /**
@@ -172,7 +259,17 @@ class ActController extends Controller
         //
     }
 
-    public function printAct($id) {
-        //
+    public function print($id) {
+        $printData = Act::where('id', '=', $id)->first();
+        $countDays = (strtotime($printData->till_date)  - strtotime($printData->from_date))/(60*60*24);
+
+        return view('includes/act/print', compact(['printData', 'countDays']));
+    }
+
+    public function approval() {
+        $acts = Act::where('status', '=', 'approval')->get();
+
+        return view('includes/act/main', compact('acts'))->with('page', 'approval');
+
     }
 }

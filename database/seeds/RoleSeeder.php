@@ -18,5 +18,26 @@ class RoleSeeder extends Seeder {
         $developer->name = 'Web Developer';
         $developer->slug = 'web-developer';
         $developer->save();
+
+        
+        $createSto = new Role();
+        $createSto->name = 'sto';
+        $createSto->slug = 'sto';
+        $createSto->save();
+
+        $createCc = new Role();
+        $createCc->name = 'cc';
+        $createCc->slug = 'cc';
+        $createCc->save();
+
+        $createCc = new Role();
+        $createCc->name = 'sd';
+        $createCc->slug = 'sd';
+        $createCc->save();
+
+        $createAct = new Role();
+        $createAct->name = 'act';
+        $createAct->slug = 'act';
+        $createAct->save();
     }
 }

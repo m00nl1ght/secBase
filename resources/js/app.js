@@ -97,9 +97,14 @@ const checkboxMainElem = document.querySelectorAll('.js-checkbox-main');
 checkboxMainElem.forEach((elem) => {
     elem.addEventListener('click', (el) => {
         checkboxElems = el.target.closest('.js-checkbox').querySelectorAll('.js-checkbox-sub');
-           
+
         if(el.target.getAttribute('aria-checked') == 'false') {
             el.target.setAttribute('aria-checked', 'true');
+
+            if(el.target.getAttribute('name')) {
+                sub = document.querySelector('.js-checkbox-' + el.target.getAttribute('name'));
+                sub.removeAttribute('disabled');
+            } 
 
             checkboxElems.forEach((elems) => {
                 elems.closest('label').classList.remove('text-secondary');
@@ -107,6 +112,23 @@ checkboxMainElem.forEach((elem) => {
             });
         } else {
             el.target.setAttribute('aria-checked', 'false');
+
+            if(el.target.getAttribute('name')) {
+                sub = document.querySelector('.js-checkbox-' + el.target.getAttribute('name'));
+                sub.closest('label').classList.add('text-secondary');
+                sub.setAttribute('disabled', 'disabled');
+                sub.checked = false;
+                sub.removeAttribute('checked');
+                sub.setAttribute('aria-checked', 'false')
+                subChildren = sub.closest('.js-checkbox').querySelectorAll('.js-checkbox-sub');
+
+                subChildren.forEach((elems) => {
+                    elems.closest('label').classList.add('text-secondary');
+                    elems.setAttribute('disabled', 'disabled');
+                    elems.checked = false;
+                    elems.removeAttribute('checked');
+                });
+            } 
 
             checkboxElems.forEach((elems) => {
                 elems.closest('label').classList.add('text-secondary');

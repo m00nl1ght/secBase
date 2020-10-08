@@ -24,8 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user = User::find(1);
-dd($user->can('create-tasks')); // вернёт true
         return view('home');
     }
 }

@@ -15,6 +15,10 @@ class UserSeeder extends Seeder {
     public function run() {
         $developer = Role::where('slug','web-developer')->first();
         $manager = Role::where('slug', 'project-manager')->first();
+        $sto = Role::where('slug', 'sto')->first();
+        $cc = Role::where('slug', 'cc')->first();
+        $sd = Role::where('slug', 'sd')->first();
+        $act = Role::where('slug', 'act')->first();
         $createTasks = Permission::where('slug','create-tasks')->first();
         $manageUsers = Permission::where('slug','manage-users')->first();
 
@@ -34,5 +38,29 @@ class UserSeeder extends Seeder {
         $user2->save();
         $user2->roles()->attach($manager);
         $user2->permissions()->attach($manageUsers);
+
+        $user3 = new User();
+        $user3->email = 'sto@sto';
+        $user3->name = 'Сотрудник СТО';
+        $user3->password = bcrypt('secret');
+        $user3->save();
+        $user3->roles()->attach($sto);
+        $user3->roles()->attach($act);
+
+        $user4 = new User();
+        $user4->name = 'Сотрудник СС';
+        $user4->email = 'cc@cc';
+        $user4->password = bcrypt('secret');
+        $user4->save();
+        $user4->roles()->attach($cc);
+        $user4->roles()->attach($act);
+
+        $user5 = new User();
+        $user5->name = 'Сотрудник СБ';
+        $user5->email = 'sd@sd';
+        $user5->password = bcrypt('secret');
+        $user5->save();
+        $user5->roles()->attach($sd);
+        $user5->roles()->attach($act);
     }
 }

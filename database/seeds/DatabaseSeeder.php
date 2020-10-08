@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CheckboxSeeder::class);
+        $this->call(SafetyactionSeeder::class);
         // $this->call(UsersTableSeeder::class);
     }
 }

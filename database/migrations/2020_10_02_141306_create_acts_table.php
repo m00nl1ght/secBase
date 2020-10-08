@@ -22,6 +22,7 @@ class CreateActsTable extends Migration
             $table->string('place');
             $table->string('description');
             $table->string('instrument');
+            $table->string('status', 50);
             $table->time('from_time', 0)->nullable();
             $table->time('till_time', 0)->nullable();
             $table->date('from_date', 0)->nullable();

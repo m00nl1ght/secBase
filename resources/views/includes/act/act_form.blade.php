@@ -110,8 +110,8 @@
         @foreach($main as $arr=>$key)
             <div class="js-checkbox col-3 d-flex flex-column bg-light py-3">
                 <label class="h6">
-                    <input class="js-checkbox-main" type="checkbox" aria-checked="false">
-                    {{ $arr }}
+                    <input class="js-checkbox-main" type="checkbox" aria-checked="false" name="{{ $arr }}">
+                    {{ $checkboxArr->where('name', '=', $arr)->first()->description }}
                 </label>
 
                 @foreach($key as $arr=>$key)
@@ -133,8 +133,8 @@
         @foreach($sub as $arr=>$key)
             <div class="js-checkbox col-3 d-flex flex-column bg-light py-3">
                 <label class="h6">
-                    <input class="js-checkbox-main" type="checkbox" aria-checked="false">
-                    {{ $arr }}
+                    <input class="js-checkbox-main js-checkbox-{{ $arr }}" type="checkbox" aria-checked="false" disabled>
+                    {{ $checkboxArr->where('name', '=', $arr)->first()->description }}
                 </label>
        
                 @foreach($key as $arr=>$key)

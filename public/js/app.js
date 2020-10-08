@@ -204,12 +204,35 @@ checkboxMainElem.forEach(function (elem) {
 
     if (el.target.getAttribute('aria-checked') == 'false') {
       el.target.setAttribute('aria-checked', 'true');
+
+      if (el.target.getAttribute('name')) {
+        sub = document.querySelector('.js-checkbox-' + el.target.getAttribute('name'));
+        sub.removeAttribute('disabled');
+      }
+
       checkboxElems.forEach(function (elems) {
         elems.closest('label').classList.remove('text-secondary');
         elems.removeAttribute('disabled');
       });
     } else {
       el.target.setAttribute('aria-checked', 'false');
+
+      if (el.target.getAttribute('name')) {
+        sub = document.querySelector('.js-checkbox-' + el.target.getAttribute('name'));
+        sub.closest('label').classList.add('text-secondary');
+        sub.setAttribute('disabled', 'disabled');
+        sub.checked = false;
+        sub.removeAttribute('checked');
+        sub.setAttribute('aria-checked', 'false');
+        subChildren = sub.closest('.js-checkbox').querySelectorAll('.js-checkbox-sub');
+        subChildren.forEach(function (elems) {
+          elems.closest('label').classList.add('text-secondary');
+          elems.setAttribute('disabled', 'disabled');
+          elems.checked = false;
+          elems.removeAttribute('checked');
+        });
+      }
+
       checkboxElems.forEach(function (elems) {
         elems.closest('label').classList.add('text-secondary');
         elems.setAttribute('disabled', 'disabled');
@@ -219,6 +242,17 @@ checkboxMainElem.forEach(function (elem) {
     }
   });
 });
+
+/***/ }),
+
+/***/ "./resources/sass/act_printBlank.scss":
+/*!********************************************!*\
+  !*** ./resources/sass/act_printBlank.scss ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -256,16 +290,17 @@ checkboxMainElem.forEach(function (elem) {
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/car_reportBlank.scss ./resources/sass/reportBlank.scss ***!
-  \*************************************************************************************************************************************/
+/*!**************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/car_reportBlank.scss ./resources/sass/reportBlank.scss ./resources/sass/act_printBlank.scss ***!
+  \**************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\js\app.js */"./resources/js/app.js");
 __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\app.scss */"./resources/sass/app.scss");
 __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\car_reportBlank.scss */"./resources/sass/car_reportBlank.scss");
-module.exports = __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\reportBlank.scss */"./resources/sass/reportBlank.scss");
+__webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\reportBlank.scss */"./resources/sass/reportBlank.scss");
+module.exports = __webpack_require__(/*! C:\Users\kovesh1\Desktop\skillBox\OSPanel\domains\secBase\resources\sass\act_printBlank.scss */"./resources/sass/act_printBlank.scss");
 
 
 /***/ })

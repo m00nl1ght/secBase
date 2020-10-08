@@ -14,4 +14,5 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/car_reportBlank.scss', 'public/css')
-    .sass('resources/sass/reportBlank.scss', 'public/css');
+    .sass('resources/sass/reportBlank.scss', 'public/css')
+    .sass('resources/sass/act_printBlank.scss', 'public/css');;
