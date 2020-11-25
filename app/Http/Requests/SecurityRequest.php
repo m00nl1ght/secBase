@@ -31,7 +31,8 @@ class SecurityRequest extends FormRequest
 
     public function messages() {
         return [
-            'sec_main.required' => 'Поле Начальник смены является обязательным'
+            'sec_main.required' => 'Поле Начальник смены является обязательным',
+            'sec_writer.required' => 'Поле Инспектор пропускного режима является обязательным'
         ];
     }
 }

@@ -15,7 +15,7 @@
                 <a class="nav-link text-dark" href="{{ route('security-new') }}">Новая смена</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="{{ route('security-current') }}">Текущая смена</a>
+                <a class="nav-link text-dark" href="{{ route('security-edit') }}">Состав смены</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-dark" href="{{ route('security-report') }}">Отчет</a>

@@ -1,88 +1,11 @@
-const surnameElem = $("#visitor_surname");
-const nameElem = $("#visitor_name");
-const patronymicElem = $("#visitor_patronymic");
-const firmElem = $("#visitor_firm");
+// const { isSet } = require("lodash");
+import { Autoinsert } from './modules/autoinsert.js';
+import { inputFirstBigLetter } from './modules/helpers.js';
 
-//отправка запроса
-let sendRequest = function(key, data) {
-    let url = '';
-    if(window.location.pathname == '/visitor/new') {
-        url = "/visitor/autoinsert";
-    } else if(window.location.pathname == '/car/new') {
-        url = "/car/autoinsert";
-    }
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    let request = $.ajax({
-        url: url,
-        type: "POST",
-        data: {"_token": $('meta[name="csrf-token"]').attr('content'),
-            "key" : key,
-            "data" : data },
-        dataType: "json"
-    });
-        
-    return request;
-}
 
-//вставка в форму автоподстановки
-let insertIntoForm = function(data) {
-    surnameElem.val(data.surname);
-    nameElem.val(data.name);
-    patronymicElem.val(data.patronymic);
-    $("#visitor_phone").val(data.phone);
-    firmElem.val(data.firm.name);
-}
-
-surnameElem.keyup(function() {
-    if(this.value.length >= 3) {
-        let resp = sendRequest('surname', this.value);
-
-        resp.done(function(response) {   
-            $("#autosubstitution").empty();
-
-            response.forEach(element => { //собираем варианты автоподстановки
-                let newElem = $('<li class="p-0 my-1 list-group-item"></li>');
-                let newElemForm = $(`<form action="#" method="post" name="${element.id}"></form`);
-                let newElemFormButton = $('<button class="w-100 btn btn-outline-secondary text-left" type="submit"></button>');
-
-                newElemFormButton.text(`${element.surname} ${element.name} ${element.patronymic}`);
-
-                newElemForm.append(newElemFormButton).submit(function() { //обработчик форм автоподстановки
-                    event.preventDefault();
-
-                    let resp = sendRequest('id', $(this).attr('name'));
-                    resp.done(function(response) {
-                        insertIntoForm(response);
-                    })         
-                });
-
-                $("#autosubstitution").append(newElem.append(newElemForm)); //выводим собранные варианты на экран
-            });
-        });
-    }
-}); 
-
-//показать варианты автоподскановки при фокусе
-surnameElem.focus(function() {
-    let insertElem = $('<ul id="autosubstitution" class="position-absolute w-100 m0 list-group bg-light"></ul>');
-    surnameElem.after(insertElem);
-});
-
-//скрыть варианты автоподскановки при фокусе
-surnameElem.blur(function() {
-    setTimeout(function(){
-        $("#autosubstitution").remove();
-    }, 300);  
-});
-
-//инпуты с большой буквы
-let inputBigLetterElem = document.querySelectorAll(".capitalize");
-inputBigLetterElem.forEach(function(e) {
-    e.addEventListener("input", function() {
-        this.value = this.value[0].toUpperCase() + this.value.slice(1);
-      });
-});
-
+inputFirstBigLetter(".capitalize");
 
 //чекбоксы
 const checkboxAllElem = document.querySelectorAll('input[type=checkbox]');
@@ -139,3 +62,160 @@ checkboxMainElem.forEach((elem) => {
         }
     });
 });
+
+
+//автоподстановка в форму добавления Security
+const securityAddFormElem = document.querySelector('.js-security-add-form');
+if (securityAddFormElem){
+    const securityFormItemElem = securityAddFormElem.querySelectorAll('.form-control');
+
+    securityFormItemElem.forEach((elems) => {
+        let props = {
+            url : '/security/autoinsert',
+    
+            data : {
+                "_token" : token,
+                "key" : "name" 
+            },
+    
+            insertIntoField : function (elem) {
+                elems.value = elem.name;
+            }
+        };
+    
+        const autoinsert = new Autoinsert(elems, props);
+    
+        autoinsert.getFocus();
+        autoinsert.lostFocus();
+        autoinsert.sendRequest();
+    });
+}
+
+//автоподстановка в формы Visitor и Car
+const visitorForm = document.querySelector('.js-visitor-form');
+if (visitorForm) {
+    const visitorSurnameElem = visitorForm.querySelector('#visitor_surname');
+
+    let props = {            
+        data : {
+        "_token" : token,
+        "key" : "name"
+        }
+    };
+
+    if(window.location.pathname == '/visitor/new') {
+        props.url = "/visitor/autoinsert"
+
+        props.insertIntoField = function (elems) {
+            visitorSurnameElem.value = elems.surname;
+            document.querySelector('#visitor_name').value = elems.name;
+            document.querySelector('#visitor_patronymic').value = elems.patronymic;
+            document.querySelector('#visitor_phone').value = elems.phone;
+            document.querySelector('#visitor_firm').value = elems.firm.name;
+            document.querySelector('#visitor_category').value = elems.category.name;
+        }
+
+    } else if(window.location.pathname == '/car/new') {        
+        props.url = "/car/autoinsert"
+        
+        props.insertIntoField = function (elems) {
+            visitorSurnameElem.value = elems.surname;
+            document.querySelector('#visitor_name').value = elems.name;
+            document.querySelector('#visitor_patronymic').value = elems.patronymic;
+            document.querySelector('#visitor_phone').value = elems.phone;
+            document.querySelector('#visitor_firm').value = elems.firm.name;
+            document.querySelector('#visitor_category').value = elems.category.name;
+
+            if (elems.car !== null) {
+                document.querySelector('#visitor_carNumber').value = elems.car.number;
+                document.querySelector('#visitor_carModel').value = elems.car.model;
+            }
+        }
+    }
+   
+    const autoinsert = new Autoinsert(visitorSurnameElem, props);
+
+    autoinsert.getFocus();
+    autoinsert.lostFocus();
+    autoinsert.sendRequest();
+
+}
+
+//автоподстановка в форму добавления Employee
+const employeeFormItemElem = document.querySelector('#visitor_employee_surname');
+
+if (employeeFormItemElem) {
+    let props = {
+        url : '/employee/autoinsert',
+
+        data : {
+            "_token" : token,
+            "key" : "name" 
+        },
+
+        insertIntoField : function (elems) {
+            employeeFormItemElem.value = elems.surname;
+            document.querySelector('#visitor_employee_name').value = elems.name;
+            document.querySelector('#visitor_employee_patronymic').value = elems.patronymic;
+        }
+    };
+
+    const autoinsert = new Autoinsert(employeeFormItemElem, props);
+
+    autoinsert.getFocus();
+    autoinsert.lostFocus();
+    autoinsert.sendRequest();
+}
+
+//автоподстановка в форму выдачи карт
+const employeeCardForgetName = document.querySelector('#employee_surname');
+
+if (employeeCardForgetName) {
+    let props = {
+        url : '/employee/autoinsert',
+
+        data : {
+            "_token" : token,
+            "key" : "name" 
+        },
+
+        insertIntoField : function (elems) {
+            employeeCardForgetName.value = elems.surname;
+            document.querySelector('#employee_name').value = elems.name;
+            document.querySelector('#employee_patronymic').value = elems.patronymic;
+            document.querySelector('#employee_position').value = elems.position;
+        }
+    };
+
+    const autoinsert = new Autoinsert(employeeCardForgetName, props);
+
+    autoinsert.getFocus();
+    autoinsert.lostFocus();
+    autoinsert.sendRequest();
+}
+
+const employeeBossCardForgetName = document.querySelector('#employee_boss_surname');
+
+if (employeeBossCardForgetName) {
+    let props = {
+        url : '/employee/autoinsert',
+
+        data : {
+            "_token" : token,
+            "key" : "name" 
+        },
+
+        insertIntoField : function (elems) {
+            employeeBossCardForgetName.value = elems.surname;
+            document.querySelector('#employee_boss_name').value = elems.name;
+            document.querySelector('#employee_boss_patronymic').value = elems.patronymic;
+            document.querySelector('#employee_boss_position').value = elems.position;
+        }
+    };
+
+    const autoinsert = new Autoinsert(employeeBossCardForgetName, props);
+    
+    autoinsert.getFocus();
+    autoinsert.lostFocus();
+    autoinsert.sendRequest();
+}

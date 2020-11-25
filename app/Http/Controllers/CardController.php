@@ -18,14 +18,16 @@ class CardController extends Controller
      */
     public function index() {
         $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        
+        if($currentDate == null){
+            $currentDate = new Currentdate;
+            $currentDate->currentdate = date('Y-m-d');
+            $currentDate->save();
+        }
+
         $showCardArr = [];
 
         foreach($currentDate->incomecard as $arr) {
-            // $employee = [];
-            // foreach($arr->employee as $array){
-            //     $employee[] = $array->name;
-            // }
-
             $showCardArr[] = [
                 'id' => $arr->id,
                 'card_number' => $arr->card['number'],
@@ -35,17 +37,6 @@ class CardController extends Controller
         }
 
         return view('card', compact('showCardArr'))->with('page', 'index');
-        // $showCardArr = [];
-        // foreach($cardArr as $arr) {
-        //     $showVisitorArr[] = [
-        //         'id' => $arr->id,
-        //         'surname' => $arr->visitor->surname,
-        //         'name' => $arr->visitor->name,
-        //         'time' => $arr->in_time,
-        //         'phone' => $arr->visitor->phone
-        //     ];
-        // }
-        // 
     }
 
     /**
@@ -53,9 +44,8 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('card')->with('page', 'create');
     }
 
     /**
@@ -65,27 +55,34 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+        dd($request);
         $addIncCard = new Incomecard;
         $addIncCard->in_time = date("H:i:s");
         $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
         $currentdate->incomecard()->save($addIncCard);
 
         //employee
-        $addEmployee = Employee::where('name', '=', $request->employee)->first();
+        $addEmployee = Employee::where('surname', '=', $request->employee_surname)->first();
 
         if($addEmployee === null) {
             $addEmployee = new Employee;
-            $addEmployee->name = $request->employee;
+            $addEmployee->name = $request->employee_name;
+            $addEmployee->surname = $request->employee_surname;
+            $addEmployee->patronymic = $request->employee_patronymic;
+            $addEmployee->position = $request->employee_position;
             $addEmployee->save();
         }
+
         $addEmployee->incomecard()->save($addIncCard);
 
         //employee_boss
-        $addEmployeeBoss = Employee::where('name', '=', $request->employee_boss)->first();
+        $addEmployeeBoss = Employee::where('name', '=', $request->employee_boss_surname)->first();
 
         if($addEmployeeBoss === null) {
             $addEmployeeBoss = new Employee;
-            $addEmployeeBoss->name = $request->employee_boss;
+            $addEmployeeBoss->name = $request->employee_boss_name;
+            $addEmployeeBoss->surname = $request->employee_boss_surname;
+            $addEmployeeBoss->patronymic = $request->employee_boss_patronymic;
             $addEmployeeBoss->save();
         }
         $addEmployeeBoss->incomecard()->save($addIncCard);
@@ -105,8 +102,7 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 

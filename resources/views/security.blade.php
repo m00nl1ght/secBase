@@ -10,10 +10,10 @@
 
     @include('includes.messages')
 
-    @if($page == 'new')
-        @include('includes.security.new')
-    @elseif($page == 'current')
-        @include('includes.security.current')   
+    @if($page == 'create')
+        @include('includes.security.create') 
+    @elseif($page == 'edit')
+        @include('includes.security.edit')  
     @endif
 
 @endsection

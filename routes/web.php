@@ -18,10 +18,13 @@ Route::get('/', function () {
 });
 
 Route::get('/security/new', 'SecurityController@create')->name('security-new');
-Route::get('/security/current', 'SecurityController@current')->name('security-current');
-Route::post('/security/submit', 'SecurityController@submit')->name('security-add-form');
+Route::get('/security/edit', 'SecurityController@edit')->name('security-edit');
+Route::post('/security/update/{id}', 'SecurityController@edit')->name('security-update');
+Route::post('/security/store', 'SecurityController@store')->name('security-store');
 Route::get('/security/report', 'SecurityController@report')->name('security-report');
 Route::post('/security/report', 'SecurityController@report')->name('security-report-post');
+Route::post('/security/autoinsert', 'SecurityController@autoinsert');
+Route::get('/security/autoinsert', 'SecurityController@autoinsert');
 
 
 Route::get('/visitor/new', 'VisitorController@create')->name('visitor-new');
@@ -35,17 +38,16 @@ Route::post('/visitor/autoinsert', 'VisitorController@autoinsert');
 Route::get('/car/new', 'CarController@create')->name('car-new');
 Route::post('/car/submit', 'CarController@store')->name('car-add-form');
 Route::get('/car/index', 'CarController@index')->name('car-index');
-// Route::get('/car/printBlank', function () {
-//     return view('printBlank')->with('page', 'car');
-// })->name('car-printBlank');
 Route::get('/car/print/{id}', 'CarController@print')->name('car-print');
+Route::post('/car/exit', 'CarController@exit')->name('car-exit');
 Route::post('/car/autoinsert', 'CarController@autoinsert');
 
-Route::get('/card/new', function () {
-    return view('card')->with('page', 'new');
-})->name('card-new');
-Route::post('/card/submit', 'CardController@store')->name('card-add-form');
+
+Route::post('/employee/autoinsert', 'EmployeeController@autoinsert');
+
 Route::get('/card/index', 'CardController@index')->name('card-index');
+Route::get('/card/create', 'CardController@create')->name('card-create');
+Route::post('/card/store', 'CardController@store')->name('card-store');
 
 
 Route::get('/fault/new', function () {
@@ -73,3 +75,6 @@ Route::get('/act/print/{id}', 'ActController@print')->name('act-print');
 Route::get('/act/index', 'ActController@index')->name('act-index');
 Route::post('/act/update/{id}', 'ActController@update')->name('act-update');
 Route::get('/act/approval', 'ActController@approval')->name('act-approval');
+
+//отправка почты
+Route::get('/send-email', 'FeedbackController@send')->name('email-security-report');

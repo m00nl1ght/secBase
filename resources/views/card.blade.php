@@ -10,8 +10,8 @@
 
     @include('includes.messages')
 
-    @if($page == 'new')
-        @include('includes.card.new')
+    @if($page == 'create')
+        @include('includes.card.create')
     @elseif($page == 'index')
         @include('includes.card.index')   
     @endif

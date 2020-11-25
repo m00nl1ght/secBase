@@ -55,7 +55,7 @@
 .page-container {
   display: flex;
   justify-content: space-between;
-  height: 110mm;
+  height: 120mm;
 }
 
 .page-header {
@@ -167,5 +167,25 @@
 .warning-message__img {
   margin-top: 1mm;
   width: 90mm;
+}
+
+.rules {
+  padding: 20px 0;
+}
+
+.rules__header {
+  font-size: 7mm;
+  font-weight: 700;
+  text-align: center;
+}
+
+.rules__list {
+  margin: 0;
+  margin-top: 40px;
+  font-size: 4.5mm;
+}
+
+.rules__list-item {
+  margin-top: 10px;
 }
 

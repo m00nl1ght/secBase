@@ -1,3 +1,6 @@
+@if ($showVisitorArr == null)
+    <p class="alert alert-success">Территория пуста, все посетители дома!</p>
+@else
 <table class="table table-hover">
         <thead>
             <th scope="col">Печать</th>
@@ -44,3 +47,4 @@
             <?php } ?>
         </tbody>
 </table>
+@endif

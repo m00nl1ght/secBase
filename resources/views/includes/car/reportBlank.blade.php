@@ -106,10 +106,10 @@
 
                 <table class="table-box">
                     <tr>
-                        <th class="table-box__item" colspan=2>Убытие</th>
+                        <th class="table-box__item" colspan=2>Отметки сотрудника охраны</th>
                     </tr>
                     <tr>
-                        <td class="table-box__item table-box__item_w50">Время</td>
+                        <td class="table-box__item table-box__item_w50">Время убытия</td>
                         <td class="table-box__item"></td>
                     </tr>
                     <tr>

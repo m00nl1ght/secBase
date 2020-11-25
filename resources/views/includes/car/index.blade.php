@@ -1,3 +1,6 @@
+@if ($showCarArr == null)
+    <p class="alert alert-success">Территория пуста, все подрядчики дома!</p>
+@else
 <table class="table table-hover">
         <thead>
             <th scope="col">Печать</th>
@@ -34,7 +37,8 @@
                 <td><?= $arr['phone'] ?></td>
                 <td><?= $arr['time'] ?></td>             
                 <td>
-                    <form action="#" name="out_car_form">
+                    <form action="{{ route('car-exit') }}" name="out_car_form" method="post">
+                    @csrf
                         <div class="row justify-content-between">
                             <input class="d-none" type="text" name="id" value="<?= $arr['id'] ?>">
                             <input type="time" name="out_time" placeholder="время выхода">
@@ -46,3 +50,4 @@
             <?php } ?>
         </tbody>
 </table>
+@endif

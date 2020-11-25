@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\StoreCarRequest;
 
 use Illuminate\Http\Request;
 use App\Models\Car;
+use App\Models\Category;
 use App\Models\Currentdate;
 use App\Models\Employee;
 use App\Models\Firm;
@@ -19,19 +21,18 @@ class CarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-        $carArr = $currentDate->incomecar;
-
+        $in = Incomecar::where('out_time', '=', null)->get();
+ 
         $showCarArr = [];
-        foreach($carArr as $arr) {
+        foreach($in as $arr) {
             $showCarArr[] = [
-                'id' => $arr->id,
-                'surname' => $arr->visitor->surname,
-                'name' => $arr->visitor->name,
-                'car_number' => $arr->visitor->car->number,
-                'time' => $arr->in_time,
-                'phone' => $arr->visitor->phone
-            ];
+                    'id' => $arr->id,
+                    'surname' => $arr->visitor->surname,
+                    'name' => $arr->visitor->name,
+                    'car_number' => $arr->visitor->car->number,
+                    'time' => $arr->in_time,
+                    'phone' => $arr->visitor->phone
+                ];
         }
 
         return view('car', compact('showCarArr'))->with('page', 'index');
@@ -45,11 +46,14 @@ class CarController extends Controller
     public function create() {
         $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
         
-        if($currentdate == null) {
+        if($currentdate == null || $currentdate->dategroup == null) {
             return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
         }
 
-        return view('car')->with('page', 'new');
+        $category = Category::all();
+        $securityWriter = $currentdate->dategroup->security->where('category', 'writer')->first();
+
+        return view('car', compact('category', 'securityWriter'))->with('page', 'new');
     }
 
     /**
@@ -58,7 +62,7 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
+    public function store(StoreCarRequest $request) {
         $addIncCar = new Incomecar;
         $addIncCar->in_time = date("H:i:s");
         $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
@@ -92,14 +96,13 @@ class CarController extends Controller
             $addFirm = Firm::where('name', '=', $request->visitor_firm)->first();
 
             if($addFirm === null) {
-                $addFirm = new Employee;
+                $addFirm = new Firm;
                 $addFirm->name = $request->visitor_firm;
                 $addFirm->save();
             }
             $addFirm->visitor()->save($addVisitor);
-        }
-  
-        else if ($addVisitor->car === null) {
+
+        } else if ($addVisitor->car === null) {
             $addCar = Car::where('number', '=', $request->visitor_carNumber)->first();
 
             if($addCar === null){
@@ -109,15 +112,49 @@ class CarController extends Controller
                 $addCar->save();
             }
             $addCar->visitor()->save($addVisitor);
+
+        } else {
+            if ($addVisitor->phone !== $request->visitor_phone) {
+                $addVisitor->phone = $request->visitor_phone;
+                $addVisitor->save();
+            }
+
+            if ($addVisitor->category->name !== $request->visitor_category) {
+                $addVisitor->category_id = Category::where('name', $request->visitor_category)->first()->id;
+                $addVisitor->save();
+            }
+
+            if ($addVisitor->firm->name !== $request->visitor_firm) {
+                $addFirm = Firm::where('name', '=', $request->visitor_firm)->first();
+
+                if($addFirm === null) {
+                    $addFirm = new Firm;
+                    $addFirm->name = $request->visitor_firm;
+                    $addFirm->save();
+                }
+    
+                $addFirm->visitor()->save($addVisitor);
+            }
+
+            if ($addVisitor->car->number !== $request->visitor_carNumber) {
+                $addCar = new Car;
+                $addCar->number = $request->visitor_carNumber;
+                $addCar->model = $request->visitor_carModel;
+                $addCar->save();
+                $addCar->visitor()->save($addVisitor);
+            }
         }
+
         $addVisitor->incomecar()->save($addIncCar);
 
         //employee
-        $addEmployee = Employee::where('name', '=', $request->visitor_employee)->first();
+        $addEmployee = Employee::where('surname', '=', $request->visitor_employee_surname)->first();
 
         if($addEmployee === null) {
             $addEmployee = new Employee;
-            $addEmployee->name = $request->visitor_employee;
+            $addEmployee->name = $request->visitor_employee_name;
+            $addEmployee->surname = $request->visitor_employee_surname;
+            $addEmployee->patronymic = $request->visitor_employee_patronymic;
             $addEmployee->save();
         }
         $addEmployee->incomecar()->save($addIncCar);
@@ -137,20 +174,25 @@ class CarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
+    /**
+     * Display the print blank.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function print($id) {
         $printData = Incomecar::where('id', '=', $id)->first();
 
         $printDataArr = [
             'id' => $id,
-            'visitor' => $printData->visitor->name . ' ' . $printData->visitor->surname,
+            'visitor' => $printData->visitor->surname . ' ' . mb_substr($printData->visitor->name, 0, 1) . '. ' . mb_substr($printData->visitor->patronymic, 0, 1) . '.',
             'car_number' => $printData->visitor->car->model . ' ' . $printData->visitor->car->number,
             'firm' => $printData->visitor->firm->name,
-            'employee' => $printData->employee->name,
+            'employee' => $printData->employee->surname . ' ' . mb_substr($printData->employee->name, 0, 1) . '. ' . mb_substr($printData->employee->patronymic, 0, 1) . '.',
             'date' => $printData->currentdate->currentdate,
             'time' => $printData->in_time,
             'security' => $printData->security->name
@@ -158,6 +200,27 @@ class CarController extends Controller
 
         return view('includes/car/reportBlank', compact('printDataArr'));
     }
+
+    
+    /**
+     * Registration people exit from territory.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function exit(Request $request) {
+        $exitCar = Incomecar::where('id', '=', $request->id)->first();
+
+        if($request->out_time !== null) {
+            $exitCar->out_time = $request->out_time;
+        } else {
+            $exitCar->out_time = date("H:i:s");
+        }
+        
+        $exitCar->save();
+        return redirect()->route('car-index');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -197,8 +260,8 @@ class CarController extends Controller
             $resp =  Visitor::with('firm')
             ->where('id', '=', $request->data)
             ->first();
-        } elseif($request->key == "surname") {
-            $resp =  Visitor::where('surname', 'LIKE', $request->data . '%')->get();
+        } elseif($request->key == "name") {
+            $resp =  Visitor::with('firm')->with('car')->with('category')->where('surname', 'LIKE', $request->data . '%')->get();
         } 
 
         return $resp;

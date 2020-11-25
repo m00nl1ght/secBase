@@ -1,28 +1,13 @@
-@extends('layouts.app')
+  <a href="{{ route('security-report-post') }}">Ссылка на отчет</a>
 
-@section('page-header')Отчет за смену
-@endsection
-
-@section('title-block')Отчет за смену
-@endsection
-
-@section('content')
-    <div class="row  border-bottom pb-3">
-        <form class="d-flex justify-content-between" action="{{ route('security-report-post') }}">
-            <label class="col-form-label col-4" for="date">Показать отчет за</label>
-            <input id="date" class="form-control" type="date" name="reportDate">
-            <button class="btn btn-primary ml-5" type="submit">Показать&nbsp;отчет</button>
-        </form>    
-    </div>
-
-    <h3 class="py-4">Дежурная сводка охраны за {{ $reportDay }} - {{ $reportDayTomorrow }} число</h3>
+    <h3 class="py-4">Дежурная сводка охраны за {{ $feedback['reportDay'] }} - {{ $feedback['reportDayTomorrow'] }} число</h3>
 
     <div class="row d-flex justify-content-end">
         <div class="col-3">
             <h5>Состав Смены</h5>
 
             <ul class="list-group list-group-flush">
-                @foreach ($securityGuys as $arr)
+                @foreach ($feedback['securityGuys'] as $arr)
                     <li class="list-group-item py-2">{{ $arr->name }}</li>
                 @endforeach
             </ul>
@@ -41,7 +26,7 @@
                 <th scope="col">Дата возникновения</th>       
             </thead>
             <tbody>
-                @foreach ($faults as $arr)
+                @foreach ($feedback['faults'] as $arr)
                     <tr>
                         <td>{{ $arr->system }}</td>
                         <td>{{ $arr->name }}</td>
@@ -63,7 +48,7 @@
                 <th scope="col">Время</th>  
             </thead>
             <tbody>
-                @foreach ($incidents as $arr)
+                @foreach ($feedback['incidents'] as $arr)
                     <tr>
                         <td>{{ $arr->description }}</td>
                         <td>{{ $arr->action }}</td>
@@ -78,7 +63,7 @@
         <div class="col">
             <h5>Автотранспорт</h5>
             <ul class="list-group">
-            @foreach ($countCarArr as $array=>$key)            
+            @foreach ($feedback['countCarArr'] as $array=>$key)            
                 <li class="list-group-item">
                     <span>{{ $array }}</span>
                     <span>{{ $key }}</span>
@@ -89,7 +74,7 @@
         <div class="col">
             <h5>Посетители</h5>
             <ul class="list-group">     
-                @foreach ($countPeopleArr as $array=>$key)            
+                @foreach ($feedback['countPeopleArr'] as $array=>$key)            
                 <li class="list-group-item">
                     <span>{{ $array }}</span>
                     <span>{{ $key }}</span>
@@ -99,4 +84,3 @@
         </div>
     </div>
 
-@endsection
