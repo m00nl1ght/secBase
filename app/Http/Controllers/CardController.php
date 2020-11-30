@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Security;
 use App\Models\Currentdate;
 use App\Models\Card;
+use App\Models\Cardcategory;
 use App\Models\Employee;
 use App\Models\Incomecard;
 
@@ -17,26 +18,9 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-        
-        if($currentDate == null){
-            $currentDate = new Currentdate;
-            $currentDate->currentdate = date('Y-m-d');
-            $currentDate->save();
-        }
+        $cards = Card::with('cardcategory')->get();
 
-        $showCardArr = [];
-
-        foreach($currentDate->incomecard as $arr) {
-            $showCardArr[] = [
-                'id' => $arr->id,
-                'card_number' => $arr->card['number'],
-                'time' => $arr->in_time,
-                'employee' => $arr->employee->first()->name
-            ];
-        }
-
-        return view('card', compact('showCardArr'))->with('page', 'index');
+        return view('card', compact('cards'))->with('page', 'index');
     }
 
     /**
@@ -45,7 +29,15 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('card')->with('page', 'create');
+        $card_category = Cardcategory::get();
+
+        return view('card', compact('card_category'))->with('page', 'create');
+    }
+
+    public function createEmployee() {
+        $cards = Cardcategory::where('name', 'employee')->first()->card->where('status', false);
+
+        return view('card', compact('cards'))->with('page', 'create-employee');
     }
 
     /**
@@ -55,7 +47,23 @@ class CardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        dd($request);
+
+        $checkCard = Card::where('number', $request->card_number)->first();
+
+        if ($checkCard) {
+            return redirect()->route('card-create')->with('warning_message', 'Карта под номером ' . $request->card_number . ' уже существует');
+        }
+
+        $newCard = new Card;
+        $newCard->number = $request->card_number;
+        $newCard->status = false;
+        $newCard->cardcategory_id = $request->card_category;
+        $newCard->save();
+
+        return redirect()->route('card-create')->with('success', 'Карта добавлена');
+    }
+
+    public function storeEmployee(Request $request) {
         $addIncCard = new Incomecard;
         $addIncCard->in_time = date("H:i:s");
         $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
@@ -88,12 +96,12 @@ class CardController extends Controller
         $addEmployeeBoss->incomecard()->save($addIncCard);
 
         //card
-        $addCard = Card::where('number', '=', $request->card_number)->first();
+        $addCard = Card::where('id', $request->card_number)->first();
         $addCard->status = true;
         $addCard->save();
         $addCard->incomecard()->save($addIncCard);
 
-        return redirect()->route('card-index')->with('success', 'Пропуск выдан');
+        return redirect()->route('income-index')->with('success', 'Пропуск выдан');
     }
 
     /**
@@ -135,8 +143,10 @@ class CardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+        Card::where('id', $id)->delete();
+        
+        return redirect()->route('card-index')->with('success', 'Пропуск удален');
     }
+
 }

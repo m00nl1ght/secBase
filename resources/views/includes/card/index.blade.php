@@ -1,32 +1,26 @@
 <table class="table table-hover">
         <thead>
-            <th scope="col">Фамилия/Имя</th>
+            <th scope="col">Категория</th>
             <th scope="col">Номер пропуска</th>
-            <th scope="col">Время входа</th>
-            <th scope="col">
-                <div class="row justify-content-between">
-                    <span>Время выхода</span>
-                    <span>Отправить</span>
-                </div>
-            </th>
+            <th scope="col">Удалить</th>
             
         </thead>
         <tbody>
-            <?php foreach($showCardArr as $arr) { ?>
+            @foreach ($cards as $arr)
             <tr>
-                <td><?= $arr['employee'] ?></td>
-                <td><?= $arr['card_number'] ?></td>
-                <td><?= $arr['time'] ?></td>             
+                <td>{{ $arr->cardcategory->description }}</td>
+                <td>{{ $arr->number }}</td>           
                 <td>
-                    <form action="#" name="out_car_form">
-                        <div class="row justify-content-between">
-                            <input class="d-none" type="text" name="id" value="<?= $arr['id'] ?>">
-                            <input type="time" name="out_time" placeholder="время выхода">
-                            <button  class="btn btn-info col-4" type="submit">Вышел</button>
+                    <form method="POST" action="{{action('CardController@destroy', ['id' => $arr->id])}}" name="del_card_form">
+                        @csrf   
+                        <div class="row justify-content-around">
+                            <input class="d-none" type="text" name="id" value="{{ $arr->id }}">
+
+                            <button  class="btn btn-danger" type="submit">Удалить</button>
                         </div>  
                     </form>
                 </td>
             </tr>
-            <?php } ?>
+            @endforeach
         </tbody>
 </table>

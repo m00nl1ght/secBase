@@ -36,6 +36,12 @@ class IncidentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+
+        if($currentdate == null || $currentdate->dategroup == null) {
+            return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
+        }
+        
         return view('incident')->with('page', 'new');
     }
 

@@ -38,6 +38,7 @@
                 <th scope="col">Система</th>
                 <th scope="col">Название</th>
                 <th scope="col">Место</th>
+                <th scope="col">Комментарий</th>
                 <th scope="col">Дата возникновения</th>       
             </thead>
             <tbody>
@@ -46,6 +47,7 @@
                         <td>{{ $arr->system }}</td>
                         <td>{{ $arr->name }}</td>
                         <td>{{ $arr->place }}</td>
+                        <td>{{ $arr->comment }}</td>
                         <td>{{ $arr->currentdate->currentdate }}</td>             
                     </tr>
                 @endforeach

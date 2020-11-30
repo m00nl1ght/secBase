@@ -19,7 +19,7 @@ class CreateIncomecardsTable extends Migration
             $table->time('out_time', 0)->nullable();
             $table->unsignedBigInteger('card_id')->nullable();
             $table->unsignedBigInteger('currentdate_id')->nullable();
-            $table->foreign('card_id')->references('id')->on('cards')->onDelete('cascade');
+            $table->foreign('card_id')->references('id')->on('cards')->onDelete('set null');
             $table->foreign('currentdate_id')->references('id')->on('currentdates')->onDelete('cascade');     
             $table->timestamps();
         });

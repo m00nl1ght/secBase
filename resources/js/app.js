@@ -1,6 +1,6 @@
 // const { isSet } = require("lodash");
 import { Autoinsert } from './modules/autoinsert.js';
-import { inputFirstBigLetter } from './modules/helpers.js';
+import { inputFirstBigLetter, inputBigLetter } from './modules/helpers.js';
 
 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -127,8 +127,8 @@ if (visitorForm) {
             document.querySelector('#visitor_category').value = elems.category.name;
 
             if (elems.car !== null) {
-                document.querySelector('#visitor_carNumber').value = elems.car.number;
-                document.querySelector('#visitor_carModel').value = elems.car.model;
+                document.querySelector('#visitor_car_number').value = elems.car.number;
+                document.querySelector('#visitor_car_model').value = elems.car.model;
             }
         }
     }
@@ -139,6 +139,11 @@ if (visitorForm) {
     autoinsert.lostFocus();
     autoinsert.sendRequest();
 
+    const carNumberElem = document.querySelector('#visitor_car_number');
+
+    if(carNumberElem) {
+        inputBigLetter(carNumberElem);
+    }
 }
 
 //автоподстановка в форму добавления Employee

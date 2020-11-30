@@ -19,7 +19,6 @@ class FeedbackController extends Controller {
 
     public function send() {
         $comment = [];
-        $toEmail = "vitaliy.koveshnikov@claas.com";
 
         $reportDay = date('Y-m-d');
 
@@ -101,6 +100,7 @@ class FeedbackController extends Controller {
         $comment['countPeopleArr'] = $countPeopleArr;
         $comment['countCarArr'] = $countCarArr;
 
+        $toEmail = explode(',', env('REPORT_RECIVERS'));
         Mail::to($toEmail)->send(new ReportSecurityMail($comment));
 
         return redirect()->route('security-edit')->with('success', 'Отчет отправлен');

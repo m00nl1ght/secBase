@@ -80,14 +80,15 @@ class CarController extends Controller
             $addVisitor->surname = $request->visitor_surname;
             $addVisitor->patronymic = $request->visitor_patronymic;
             $addVisitor->phone = $request->visitor_phone;
+            $addVisitor->category_id = Category::where('name', $request->visitor_category)->first()->id;
 
             //car
-            $addCar = Car::where('number', '=', $request->visitor_carNumber)->first();
+            $addCar = Car::where('number', '=', $request->visitor_car_number)->first();
 
             if($addCar === null){
                 $addCar = new Car;
-                $addCar->number = $request->visitor_carNumber;
-                $addCar->model = $request->visitor_carModel;
+                $addCar->number = $request->visitor_car_number;
+                $addCar->model = $request->visitor_car_model;
                 $addCar->save();
             }
             $addCar->visitor()->save($addVisitor);
@@ -103,12 +104,12 @@ class CarController extends Controller
             $addFirm->visitor()->save($addVisitor);
 
         } else if ($addVisitor->car === null) {
-            $addCar = Car::where('number', '=', $request->visitor_carNumber)->first();
+            $addCar = Car::where('number', '=', $request->visitor_car_number)->first();
 
             if($addCar === null){
                 $addCar = new Car;
-                $addCar->number = $request->visitor_carNumber;
-                $addCar->model = $request->visitor_carModel;
+                $addCar->number = $request->visitor_car_number;
+                $addCar->model = $request->visitor_car_model;
                 $addCar->save();
             }
             $addCar->visitor()->save($addVisitor);
@@ -136,10 +137,10 @@ class CarController extends Controller
                 $addFirm->visitor()->save($addVisitor);
             }
 
-            if ($addVisitor->car->number !== $request->visitor_carNumber) {
+            if ($addVisitor->car->number !== $request->visitor_car_number) {
                 $addCar = new Car;
-                $addCar->number = $request->visitor_carNumber;
-                $addCar->model = $request->visitor_carModel;
+                $addCar->number = $request->visitor_car_number;
+                $addCar->model = $request->visitor_car_model;
                 $addCar->save();
                 $addCar->visitor()->save($addVisitor);
             }

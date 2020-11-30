@@ -1002,8 +1002,8 @@ if (visitorForm) {
       document.querySelector('#visitor_category').value = elems.category.name;
 
       if (elems.car !== null) {
-        document.querySelector('#visitor_carNumber').value = elems.car.number;
-        document.querySelector('#visitor_carModel').value = elems.car.model;
+        document.querySelector('#visitor_car_number').value = elems.car.number;
+        document.querySelector('#visitor_car_model').value = elems.car.model;
       }
     };
   }
@@ -1012,6 +1012,11 @@ if (visitorForm) {
   autoinsert.getFocus();
   autoinsert.lostFocus();
   autoinsert.sendRequest();
+  var carNumberElem = document.querySelector('#visitor_car_number');
+
+  if (carNumberElem) {
+    Object(_modules_helpers_js__WEBPACK_IMPORTED_MODULE_1__["inputBigLetter"])(carNumberElem);
+  }
 } //автоподстановка в форму добавления Employee
 
 
@@ -1186,13 +1191,14 @@ var Autoinsert = /*#__PURE__*/function () {
 /*!*****************************************!*\
   !*** ./resources/js/modules/helpers.js ***!
   \*****************************************/
-/*! exports provided: sendToController, inputFirstBigLetter */
+/*! exports provided: sendToController, inputFirstBigLetter, inputBigLetter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendToController", function() { return sendToController; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inputFirstBigLetter", function() { return inputFirstBigLetter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inputBigLetter", function() { return inputBigLetter; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -1257,6 +1263,14 @@ var inputFirstBigLetter = function inputFirstBigLetter(selector) {
         this.value = this.value[0].toUpperCase() + this.value.slice(1);
       }
     });
+  });
+}; //инпут все буквы большие
+
+var inputBigLetter = function inputBigLetter(selector) {
+  selector.addEventListener('input', function () {
+    if (this.value[0] != undefined) {
+      this.value = this.value.toUpperCase();
+    }
   });
 };
 

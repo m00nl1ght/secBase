@@ -10,10 +10,22 @@
 
     @include('includes.messages')
 
-    @if($page == 'create')
-        @include('includes.card.create')
-    @elseif($page == 'index')
-        @include('includes.card.index')   
-    @endif
+    @switch($page)
+        @case('create')
+            @include('includes.card.create')
+            @break
+
+        @case('create-employee')
+            @include('includes.card.createemployee')
+            @break
+
+        @case('income-index')
+            @include('includes.card.income_index')
+            @break
+        
+        @case('index')
+            @include('includes.card.index')
+            @break
+    @endswitch
 
 @endsection

@@ -30,6 +30,6 @@ class ReportSecurityMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.reportSecurity');
+        return $this->from(['address' => 'security-report@claas.com', 'name' => 'Security Report'])->view('emails.reportSecurity');
     }
 }

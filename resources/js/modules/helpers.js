@@ -28,3 +28,12 @@ export let inputFirstBigLetter = function(selector) {
         });
     });
 }
+
+//инпут все буквы большие
+export let inputBigLetter = function(selector) {
+    selector.addEventListener('input', function() {
+        if (this.value[0] != undefined) {
+            this.value = this.value.toUpperCase();
+        }
+    })
+}

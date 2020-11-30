@@ -24,9 +24,14 @@ class FaultController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+
+        if($currentdate == null || $currentdate->dategroup == null) {
+            return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
+        }
+
+        return view('fault')->with('page', 'new');
     }
 
     /**
