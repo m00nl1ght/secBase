@@ -13,6 +13,8 @@ use App\Models\Incomecar;
 use App\Models\Security;
 use App\Models\Visitor;
 
+use App\Helpers\CurrentdateHelper;
+
 class CarController extends Controller
 {
     /**
@@ -44,14 +46,16 @@ class CarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-        
-        if($currentdate == null || $currentdate->dategroup == null) {
+        $currentdate = CurrentdateHelper::checkDate();
+
+        $securityGroup = CurrentdateHelper::checkSecurityGroup();
+
+        if ($securityGroup == null) {
             return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
         }
 
         $category = Category::all();
-        $securityWriter = $currentdate->dategroup->security->where('category', 'writer')->first();
+        $securityWriter = $securityGroup->security->where('category', 'writer')->first();
 
         return view('car', compact('category', 'securityWriter'))->with('page', 'new');
     }
@@ -65,6 +69,7 @@ class CarController extends Controller
     public function store(StoreCarRequest $request) {
         $addIncCar = new Incomecar;
         $addIncCar->in_time = date("H:i:s");
+
         $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
         $currentdate->incomecar()->save($addIncCar);
 
@@ -149,13 +154,13 @@ class CarController extends Controller
         $addVisitor->incomecar()->save($addIncCar);
 
         //employee
-        $addEmployee = Employee::where('surname', '=', $request->visitor_employee_surname)->first();
+        $addEmployee = Employee::where('surname', '=', $request->employee_surname)->first();
 
         if($addEmployee === null) {
             $addEmployee = new Employee;
-            $addEmployee->name = $request->visitor_employee_name;
-            $addEmployee->surname = $request->visitor_employee_surname;
-            $addEmployee->patronymic = $request->visitor_employee_patronymic;
+            $addEmployee->name = $request->employee_name;
+            $addEmployee->surname = $request->employee_surname;
+            $addEmployee->patronymic = $request->employee_patronymic;
             $addEmployee->save();
         }
         $addEmployee->incomecar()->save($addIncCar);

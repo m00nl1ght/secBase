@@ -25,12 +25,6 @@ class FaultController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-
-        if($currentdate == null || $currentdate->dategroup == null) {
-            return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
-        }
-
         return view('fault')->with('page', 'new');
     }
 
@@ -47,7 +41,7 @@ class FaultController extends Controller
         $addIncFault->name = $request->name;
         $addIncFault->place = $request->place;
         $addIncFault->comment = $request->comment;
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentdate = CurrentdateHelper::checkDate();
         $currentdate->incomecar()->save($addIncFault);
 
         return redirect()->route('fault-index')->with('success', 'Неисправность зарегистрирована');

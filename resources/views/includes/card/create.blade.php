@@ -10,7 +10,7 @@
 
 
     <div class="form-group row">
-        <label class="col-form-label col-4" for="card_category">Выдан пропуск №</label>
+        <label class="col-form-label col-4" for="card_category">Категория</label>
         <div class="col-6">
             <select id="card_category" class="custom-select" name="card_category" value="{{ old('card_category') }}">
                 @foreach ($card_category as $row)

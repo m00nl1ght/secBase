@@ -7,6 +7,10 @@
 @endsection
 
 @section('content')
-    <h1>Главная страница</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aperiam, saepe tempora qui eius reiciendis dolorum doloremque temporibus veritatis alias eligendi minus praesentium distinctio voluptate dicta quam in fugiat? Dolore, laudantium.</p>
+
+    <div class="col">
+        <h1 class="row">Главная страница</h1>
+        <img class="row mx-auto mt-5" src="{{asset('img/start-picture.jpg')}}" alt="Стартовая картинка">
+    </div>
+
 @endsection

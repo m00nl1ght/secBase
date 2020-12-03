@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\RolesServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
+        App\Providers\HelpersCurrentdateProvider::class,
 
     ],
 
@@ -228,6 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'CurrentdateHelper' => App\Helpers\CurrentdateHelper::class,
     ],
 
 ];

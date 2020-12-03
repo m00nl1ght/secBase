@@ -14,4 +14,8 @@ class Card extends Model {
     public function cardcategory() {
         return $this->belongsTo('App\Models\Cardcategory');
     }
+
+    public function incomevisitor() {
+        return $this->hasMany('App\Models\Incomevisitor');
+    }
 }

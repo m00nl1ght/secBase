@@ -18,7 +18,7 @@ class CardcategorySeeder extends Seeder
 
         $category = new Cardcategory();
         $category->name = 'employee';
-        $category->description = 'Сотрудник предприятия';
+        $category->description = 'Временный для сотрудника';
         $category->save();
 
         $category = new Cardcategory();

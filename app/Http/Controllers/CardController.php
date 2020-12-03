@@ -10,6 +10,8 @@ use App\Models\Cardcategory;
 use App\Models\Employee;
 use App\Models\Incomecard;
 
+use App\Helpers\CurrentdateHelper;
+
 class CardController extends Controller
 {
     /**
@@ -34,12 +36,6 @@ class CardController extends Controller
         return view('card', compact('card_category'))->with('page', 'create');
     }
 
-    public function createEmployee() {
-        $cards = Cardcategory::where('name', 'employee')->first()->card->where('status', false);
-
-        return view('card', compact('cards'))->with('page', 'create-employee');
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -61,47 +57,6 @@ class CardController extends Controller
         $newCard->save();
 
         return redirect()->route('card-create')->with('success', 'Карта добавлена');
-    }
-
-    public function storeEmployee(Request $request) {
-        $addIncCard = new Incomecard;
-        $addIncCard->in_time = date("H:i:s");
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
-        $currentdate->incomecard()->save($addIncCard);
-
-        //employee
-        $addEmployee = Employee::where('surname', '=', $request->employee_surname)->first();
-
-        if($addEmployee === null) {
-            $addEmployee = new Employee;
-            $addEmployee->name = $request->employee_name;
-            $addEmployee->surname = $request->employee_surname;
-            $addEmployee->patronymic = $request->employee_patronymic;
-            $addEmployee->position = $request->employee_position;
-            $addEmployee->save();
-        }
-
-        $addEmployee->incomecard()->save($addIncCard);
-
-        //employee_boss
-        $addEmployeeBoss = Employee::where('name', '=', $request->employee_boss_surname)->first();
-
-        if($addEmployeeBoss === null) {
-            $addEmployeeBoss = new Employee;
-            $addEmployeeBoss->name = $request->employee_boss_name;
-            $addEmployeeBoss->surname = $request->employee_boss_surname;
-            $addEmployeeBoss->patronymic = $request->employee_boss_patronymic;
-            $addEmployeeBoss->save();
-        }
-        $addEmployeeBoss->incomecard()->save($addIncCard);
-
-        //card
-        $addCard = Card::where('id', $request->card_number)->first();
-        $addCard->status = true;
-        $addCard->save();
-        $addCard->incomecard()->save($addIncCard);
-
-        return redirect()->route('income-index')->with('success', 'Пропуск выдан');
     }
 
     /**

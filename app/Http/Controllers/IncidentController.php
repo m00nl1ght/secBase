@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Incident;
 use App\Models\Currentdate;
 
+use App\Helpers\CurrentdateHelper;
+
 class IncidentController extends Controller
 {
     /**
@@ -14,7 +16,7 @@ class IncidentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentDate = CurrentdateHelper::checkDate();
         $showIncidentArr = [];
 
         if($currentDate->incident !== null) {
@@ -36,9 +38,10 @@ class IncidentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentdate = CurrentdateHelper::checkDate();
+        $securityGroup = CurrentdateHelper::checkSecurityGroup();
 
-        if($currentdate == null || $currentdate->dategroup == null) {
+        if ($securityGroup == null) {
             return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
         }
         

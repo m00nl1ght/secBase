@@ -47,13 +47,13 @@ Route::post('/employee/autoinsert', 'EmployeeController@autoinsert');
 
 Route::get('/card/index', 'CardController@index')->name('card-index');
 Route::get('/card/create', 'CardController@create')->name('card-create');
-Route::get('/card/createemployee', 'CardController@createEmployee')->name('card-create-employee');
 Route::post('/card/store', 'CardController@store')->name('card-store');
-Route::post('/card/storeemployee', 'CardController@storeEmployee')->name('card-store-employee');
 Route::post('/card/destroy/{id}', 'CardController@destroy')->name('card-destroy');
 
 Route::get('/incomecard/index', 'IncomeCardController@index')->name('incomecard-index');
-
+Route::get('/card/createemployee', 'IncomeCardController@createEmployee')->name('card-create-employee');
+Route::post('/card/storeemployee', 'IncomeCardController@storeEmployee')->name('card-store-employee');
+Route::post('/incomecard/update/{id}', 'IncomeCardController@update')->name('incomecard-update');
 
 Route::get('/fault/new', 'FaultController@create')->name('fault-new');
 Route::post('/fault/submit', 'FaultController@store')->name('fault-add-form');

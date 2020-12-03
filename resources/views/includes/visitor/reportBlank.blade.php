@@ -64,7 +64,7 @@
                     </tr>
                     <tr class="table-box__row_h10">
                         <th class="table-box__item table-box__item_center table-box__item_w50">Дата</th>
-                        <th class="table-box__item table-box__item_center">Подпись водителя</th>
+                        <th class="table-box__item table-box__item_center">Подпись</th>
                     </tr>
                     <tr class="table-box__row_h10">
                         <td class="table-box__item table-box__item_center table-box__item_w50"><?= $printDataArr['date'] ?></td>

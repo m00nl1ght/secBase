@@ -22,4 +22,8 @@ class Incomevisitor extends Model {
     public function currentdate() {
         return $this->belongsTo('App\Models\Currentdate');
     }
+
+    public function card() {
+        return $this->belongsTo('App\Models\Card');
+    }
 }

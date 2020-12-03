@@ -12,21 +12,21 @@
             
         </thead>
         <tbody>
-            <?php foreach($showCardArr as $arr) { ?>
+            @foreach($incCard as $arr)
             <tr>
-                <td><?= $arr['employee'] ?></td>
-                <td><?= $arr['card_number'] ?></td>
-                <td><?= $arr['time'] ?></td>             
+                <td>{{ $arr->employee->first()->name }}</td>
+                <td>{{ $arr->card->number }}</td>
+                <td>{{ $arr->in_time }}</td>             
                 <td>
-                    <form action="#" name="out_card_form">
+                    <form action="{{ action('IncomeCardController@update', ['id' => $arr->id]) }}" name="out_card_form" method="POST">
+                        @csrf
                         <div class="row justify-content-between">
-                            <input class="d-none" type="text" name="id" value="<?= $arr['id'] ?>">
                             <input type="time" name="out_time" placeholder="время выхода">
                             <button  class="btn btn-info col-4" type="submit">Вышел</button>
                         </div>  
                     </form>
                 </td>
             </tr>
-            <?php } ?>
+            @endforeach
         </tbody>
 </table>

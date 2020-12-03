@@ -14,6 +14,8 @@ use App\Models\Incomevisitor;
 use App\Models\Incomecar;
 use App\Models\Security;
 
+use App\Helpers\CurrentdateHelper;
+
 class SecurityController extends Controller {
         /**
      * Show the form for creating a new resource.
@@ -21,14 +23,10 @@ class SecurityController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $securityGroup = CurrentdateHelper::checkSecurityGroup();
 
-        if ($currentdate !== null) {
-            $securityGroup = $currentdate->dategroup;
-
-            if ($securityGroup !== null) {
-                return redirect()->route('security-edit')->with('success', 'Смена уже была зарегистрированна');
-            }
+        if ($securityGroup !== null) {
+            return redirect()->route('security-edit')->with('success', 'Смена уже была зарегистрированна');
         }
 
         return view('security')->with('page', 'create');
@@ -47,13 +45,13 @@ class SecurityController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $securityGroup = CurrentdateHelper::checkSecurityGroup();
 
-        if($currentdate == null || $currentdate->dategroup == null) {
+        if($securityGroup == null) {
             return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
         }
 
-        $securityGuys = $currentdate->dategroup->security;
+        $securityGuys = $securityGroup->security;
 
         return view('security', compact('securityGuys'))->with('page', 'edit');
     }

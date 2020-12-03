@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreVisitorRequest;
 use Validator;
 
+use App\Models\Card;
+use App\Models\Cardcategory;
 use App\Models\Category;
 use App\Models\Currentdate;
 use App\Models\Dategroup;
@@ -14,6 +16,7 @@ use App\Models\Incomevisitor;
 use App\Models\Security;
 use App\Models\Visitor;
 
+use App\Helpers\CurrentdateHelper;
 
 class VisitorController extends Controller
 {
@@ -45,16 +48,17 @@ class VisitorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $securityGroup = CurrentdateHelper::checkSecurityGroup();
 
-        if($currentdate == null || $currentdate->dategroup == null) {
+        if ($securityGroup == null) {
             return redirect()->route('security-new')->with('warning_message', 'Сначала зарегистрируйте смену');
         }
 
         $category = Category::all();
-        $securityWriter = $currentdate->dategroup->security->where('category', 'writer')->first();
+        $securityWriter = $securityGroup->security->where('category', 'writer')->first();
+        $cards = Cardcategory::where('name', 'visitor')->first()->card->where('status', false);
 
-        return view( 'visitor', compact('category', 'securityWriter') )->with('page', 'new');
+        return view( 'visitor', compact('category', 'securityWriter', 'cards') )->with('page', 'new');
     }
 
     /**
@@ -66,7 +70,14 @@ class VisitorController extends Controller
     public function store(StoreVisitorRequest $request) {
         $addIncVisitor = new Incomevisitor;
         $addIncVisitor->in_time = date("H:i:s");
-        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+
+        //card
+        $addCard = Card::where('id', $request->card_id)->first();
+        $addCard->status = true;
+        $addCard->save();
+        $addIncVisitor->card_id = $request->card_id;
+
+        $currentdate = CurrentdateHelper::checkDate();
         $currentdate->incomevisitor()->save($addIncVisitor);
 
         //visitor
@@ -121,19 +132,19 @@ class VisitorController extends Controller
         $addVisitor->incomevisitor()->save($addIncVisitor);
 
         //employee
-        $addEmployee = Employee::where('surname', '=', $request->visitor_employee_surname)->first();
+        $addEmployee = Employee::where('surname', '=', $request->employee_surname)->first();
 
         if($addEmployee === null) {
             $addEmployee = new Employee;
-            $addEmployee->name = $request->visitor_employee_name;
-            $addEmployee->surname = $request->visitor_employee_surname;
-            $addEmployee->patronymic = $request->visitor_employee_patronymic;
+            $addEmployee->name = $request->employee_name;
+            $addEmployee->surname = $request->employee_surname;
+            $addEmployee->patronymic = $request->employee_patronymic;
             $addEmployee->save();
         }
         $addEmployee->incomevisitor()->save($addIncVisitor);
 
         //security
-        $securityWriter = Currentdate::where('currentdate', date('Y-m-d'))->first()->dategroup->security->where('category', '=', 'writer')->first();
+        $securityWriter = CurrentdateHelper::securityWriter();
         $securityWriter->incomevisitor()->save($addIncVisitor);
 
         $id =  $addIncVisitor->id;

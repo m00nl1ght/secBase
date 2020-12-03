@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Card;
 use App\Models\Currentdate;
+use App\Models\Cardcategory;
+use App\Models\Employee;
+use App\Models\Incomecard;
+
+use App\Helpers\CurrentdateHelper;
 
 class IncomeCardController extends Controller
 {
@@ -14,27 +20,11 @@ class IncomeCardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $currentDate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentDate = CurrentdateHelper::checkDate();
         
-        if($currentDate == null){
-            $currentDate = new Currentdate;
-            $currentDate->currentdate = date('Y-m-d');
-            $currentDate->save();
-        }
+        $incCard = $currentDate->incomecard->where('out_time', null);
 
-        $showCardArr = [];
-
-        foreach($currentDate->incomecard as $arr) {
-   
-            $showCardArr[] = [
-                'id' => $arr->id,
-                'card_number' => $arr->card['number'],
-                'time' => $arr->in_time,
-                'employee' => $arr->employee->first()->name
-            ];
-        }
-
-        return view('card', compact('showCardArr'))->with('page', 'income-index');
+        return view('card', compact('incCard'))->with('page', 'income-index');
     }
 
     /**
@@ -47,15 +37,62 @@ class IncomeCardController extends Controller
         //
     }
 
+    
+    public function createEmployee() {
+        $cards = Cardcategory::where('name', 'employee')->first()->card->where('status', false);
+
+        return view('card', compact('cards'))->with('page', 'create-employee');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
+    }
+
+    public function storeEmployee(Request $request) {
+        $addIncCard = new Incomecard;
+        $addIncCard->in_time = date("H:i:s");
+        $currentdate = Currentdate::where('currentdate', date('Y-m-d'))->first();
+        $currentdate->incomecard()->save($addIncCard);
+
+        //employee
+        $addEmployee = Employee::where('surname', '=', $request->employee_surname)->first();
+
+        if($addEmployee === null) {
+            $addEmployee = new Employee;
+            $addEmployee->name = $request->employee_name;
+            $addEmployee->surname = $request->employee_surname;
+            $addEmployee->patronymic = $request->employee_patronymic;
+            $addEmployee->position = $request->employee_position;
+            $addEmployee->save();
+        }
+
+        $addEmployee->incomecard()->save($addIncCard);
+
+        //employee_boss
+        $addEmployeeBoss = Employee::where('surname', '=', $request->employee_boss_surname)->first();
+
+        if($addEmployeeBoss === null) {
+            $addEmployeeBoss = new Employee;
+            $addEmployeeBoss->name = $request->employee_boss_name;
+            $addEmployeeBoss->surname = $request->employee_boss_surname;
+            $addEmployeeBoss->patronymic = $request->employee_boss_patronymic;
+            $addEmployeeBoss->save();
+        }
+        $addEmployeeBoss->incomecard()->save($addIncCard);
+
+        //card
+        $addCard = Card::where('id', $request->card_id)->first();
+        $addCard->status = true;
+        $addCard->save();
+        $addCard->incomecard()->save($addIncCard);
+
+        return redirect()->route('incomecard-index')->with('success', 'Пропуск выдан');
     }
 
     /**
@@ -87,9 +124,19 @@ class IncomeCardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id) {
+        $time = $request->out_time;
+
+        if ($time == null) {
+            $time = date("H:i:s");
+        }
+
+        $incCard = Incomecard::where('id', $id);
+        $incCard->update(['out_time' => $time]);
+
+        Card::where('id', $incCard->first()->card_id)->update(['status' => 0]);
+
+        return redirect()->route('incomecard-index')->with('success', 'Пропуск возвращен');
     }
 
     /**
