@@ -22,7 +22,7 @@ class FeedbackController extends Controller {
 
         $reportDay = date('Y-m-d');
 
-        if(date("H:i") < '07:00') {
+        if(date("H:i") < '04:00') {
             $reportDay = date('Y-m-d', strtotime('-1 days'));
         }
 
@@ -36,21 +36,21 @@ class FeedbackController extends Controller {
         $faults = Fault::where('out_date', '=',  null)->get();
 
         $incidents = Incident::where('currentdate_id', '=',  $currentdate->id)
-            ->where('in_time', '>=', '07:00:00')
+            ->where('in_time', '>=', '04:00:00')
             ->orWhere(function($query) use ($currentdateTomorrow) {
                if($currentdateTomorrow !== null) {
                 $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                ->where('in_time', '<=', '07:00:00');
+                ->where('in_time', '<=', '04:00:00');
                } 
             })
             ->get();
 
         $visitors = IncomeVisitor::where('currentdate_id', '=',  $currentdate->id)
-            ->where('in_time', '>=', '07:00:00')
+            ->where('in_time', '>=', '04:00:00')
             ->orWhere(function($query) use ($currentdateTomorrow) {
                 if($currentdateTomorrow !== null) {
                     $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                    ->where('in_time', '<=', '07:00:00');
+                    ->where('in_time', '<=', '04:00:00');
                 }
             })
             ->get();
@@ -69,11 +69,11 @@ class FeedbackController extends Controller {
         }
 
         $cars = IncomeCar::where('currentdate_id', '=',  $currentdate->id)
-        ->where('in_time', '>=', '07:00:00')
+        ->where('in_time', '>=', '04:00:00')
         ->orWhere(function($query) use ($currentdateTomorrow) {
             if($currentdateTomorrow !== null) {
                 $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                ->where('in_time', '<=', '07:00:00');
+                ->where('in_time', '<=', '04:00:00');
             }
         })
         ->get();

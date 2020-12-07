@@ -30,9 +30,9 @@ class StoreVisitorRequest extends FormRequest
             'visitor_firm' => 'required',
             'visitor_category' => 'required',
             'visitor_security' => 'required',
-            'visitor_employee_surname' => 'required',
-            'visitor_employee_name' => 'required',
-            'visitor_employee_patronymic' => 'required',
+            'employee_surname' => 'required',
+            'employee_name' => 'required',
+            'employee_patronymic' => 'required',
         ];
     }
 
@@ -45,9 +45,9 @@ class StoreVisitorRequest extends FormRequest
             // 'visitor_phone' => 'required',
             'visitor_firm.required' => 'Введите компанию посетителя',
             'visitor_security.required' => 'Введите фамилию сотрудника охраны',
-            'visitor_employee_surname.required' => 'Введите имя сотрудника КЛААС',
-            'visitor_employee_name.required' => 'Введите фамилию сотрудника КЛААС',
-            'visitor_employee_patronymic.required' => 'Введите отчество сотрудника КЛААС',
+            'employee_surname.required' => 'Введите имя сотрудника КЛААС',
+            'employee_name.required' => 'Введите фамилию сотрудника КЛААС',
+            'employee_patronymic.required' => 'Введите отчество сотрудника КЛААС',
         ];
     }
 }

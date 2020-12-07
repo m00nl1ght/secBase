@@ -21,11 +21,19 @@ class CurrentdateHelper {
     public static function checkSecurityGroup() {
         $currentSecurityDate = date('Y-m-d');
 
-        if(date("H:i") < '07:00') {
+        if(date("H:i") < '04:00') {
             $currentSecurityDate = date('Y-m-d', strtotime('-1 days'));
         }
 
-        $securityGroup = Currentdate::where('currentdate', $currentSecurityDate)->first()->dategroup;
+        $currentSecurityDate = Currentdate::where('currentdate', $currentSecurityDate)->first();
+
+        if ($currentSecurityDate == null) {
+            $currentSecurityDate = new Currentdate;
+            $currentSecurityDate->currentdate = date('Y-m-d');
+            $currentSecurityDate->save();
+        }
+
+        $securityGroup = $currentSecurityDate->dategroup;
 
         return $securityGroup;
     }
@@ -33,7 +41,7 @@ class CurrentdateHelper {
     public static function securityWriter() {
         $currentSecurityDate = date('Y-m-d');
 
-        if(date("H:i") < '07:00') {
+        if(date("H:i") < '04:00') {
             $currentSecurityDate = date('Y-m-d', strtotime('-1 days'));
         }
 

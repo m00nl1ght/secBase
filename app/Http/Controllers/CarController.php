@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\StoreCarRequest;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use App\Models\Car;
@@ -32,7 +33,7 @@ class CarController extends Controller
                     'surname' => $arr->visitor->surname,
                     'name' => $arr->visitor->name,
                     'car_number' => $arr->visitor->car->number,
-                    'time' => $arr->in_time,
+                    'time' => Carbon::createFromFormat('H:i:s', $arr->in_time)->setTimezone('Europe/Moscow')->isoFormat('HH:mm'),
                     'phone' => $arr->visitor->phone
                 ];
         }
@@ -199,8 +200,8 @@ class CarController extends Controller
             'car_number' => $printData->visitor->car->model . ' ' . $printData->visitor->car->number,
             'firm' => $printData->visitor->firm->name,
             'employee' => $printData->employee->surname . ' ' . mb_substr($printData->employee->name, 0, 1) . '. ' . mb_substr($printData->employee->patronymic, 0, 1) . '.',
-            'date' => $printData->currentdate->currentdate,
-            'time' => $printData->in_time,
+            'date' => Carbon::createFromFormat('Y-m-d', $printData->currentdate->currentdate)->format('d/m/Y'),
+            'time' => Carbon::createFromFormat('H:i:s', $printData->in_time)->setTimezone('Europe/Moscow')->isoFormat('HH:mm'),
             'security' => $printData->security->name
         ];
 

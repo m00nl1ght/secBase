@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Currentdate;
 use App\Models\Fault;
 
+use App\Helpers\CurrentdateHelper;
+
 class FaultController extends Controller
 {
     /**
@@ -64,9 +66,10 @@ class FaultController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id) {
+        $fault = Fault::where('id', $id)->first();
+
+        return view('fault', compact('fault'))->with('page', 'edit');
     }
 
     /**
@@ -77,14 +80,34 @@ class FaultController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        if($request->out_date == null) {
-            $out_date = date('Y-m-d');
-        } else {
-            $out_date = $request->out_date;
-        }
-        Fault::where('id', $id)->update(['out_date' => $out_date]);
+        Fault::where('id', $id)->
+        update([
+            'name' => $request->name,
+            'place' => $request->place,
+            'comment' => $request->comment,
+            'in_time' => $request->in_time
+        ]);
 
         return redirect()->route('fault-index')->with('success', 'Данные изменены');
+    }
+
+    /**
+     * Update the specified resource in storage (insert close time).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function close(Request $request, $id) {
+        $out_date = $request->out_date;
+
+        if($out_date == null) {
+            $out_date = date('Y-m-d');
+        }
+
+        Fault::where('id', $id)->update(['out_date' => $out_date]);
+
+        return redirect()->route('fault-index')->with('success', 'Неисправность устранена');
     }
 
     /**
@@ -93,8 +116,9 @@ class FaultController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id) {
+        Fault::where('id', $id)->delete();
+
+        return redirect()->route('fault-index')->with('success', 'Данные удалены!!');
     }
 }

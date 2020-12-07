@@ -2,7 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
+use Carbon\Carbon;
 
 use App\Http\Requests\SecurityRequest;
 
@@ -74,7 +75,7 @@ class SecurityController extends Controller {
         } else {
             $reportDay = date('Y-m-d');
 
-            if(date("H:i") < '07:00') {
+            if(date("H:i") < '04:00') {
                 $reportDay = date('Y-m-d', strtotime('-1 days'));
             }
         }
@@ -92,21 +93,21 @@ class SecurityController extends Controller {
         $faults = Fault::where('out_date', '=',  null)->get();
 
         $incidents = Incident::where('currentdate_id', '=',  $currentdate->id)
-            ->where('in_time', '>=', '07:00:00')
+            ->where('in_time', '>=', '04:00:00')
             ->orWhere(function($query) use ($currentdateTomorrow) {
                if($currentdateTomorrow !== null) {
                 $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                ->where('in_time', '<=', '07:00:00');
+                ->where('in_time', '<=', '04:00:00');
                } 
             })
             ->get();
 
         $visitors = IncomeVisitor::where('currentdate_id', '=',  $currentdate->id)
-            ->where('in_time', '>=', '07:00:00')
+            ->where('in_time', '>=', '04:00:00')
             ->orWhere(function($query) use ($currentdateTomorrow) {
                 if($currentdateTomorrow !== null) {
                     $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                    ->where('in_time', '<=', '07:00:00');
+                    ->where('in_time', '<=', '04:00:00');
                 }
             })
             ->get();
@@ -125,11 +126,11 @@ class SecurityController extends Controller {
         }
 
         $cars = IncomeCar::where('currentdate_id', '=',  $currentdate->id)
-        ->where('in_time', '>=', '07:00:00')
+        ->where('in_time', '>=', '04:00:00')
         ->orWhere(function($query) use ($currentdateTomorrow) {
             if($currentdateTomorrow !== null) {
                 $query->where('currentdate_id', '=',  $currentdateTomorrow->id)
-                ->where('in_time', '<=', '07:00:00');
+                ->where('in_time', '<=', '04:00:00');
             }
         })
         ->get();
@@ -146,6 +147,9 @@ class SecurityController extends Controller {
                 $countCarArr[$arr->visitor->category->description] = 1;
             }
         }
+
+        $reportDay = Carbon::createFromFormat('Y-m-d', $reportDay)->format('d/m');
+        $reportDayTomorrow =  Carbon::createFromFormat('Y-m-d', $reportDayTomorrow)->format('d/m/Y');
 
         return view('/reports/mainReport', compact([
             'securityGuys',

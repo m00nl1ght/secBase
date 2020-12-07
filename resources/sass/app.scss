@@ -9,5 +9,11 @@
 .big-container {
     max-width: 1600px;
 }
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1300px;
+    }
+}
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';

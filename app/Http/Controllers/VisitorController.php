@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreVisitorRequest;
 use Validator;
+use Carbon\Carbon;
 
 use App\Models\Card;
 use App\Models\Cardcategory;
@@ -34,7 +35,7 @@ class VisitorController extends Controller
                     'id' => $arr->id,
                     'surname' => $arr->visitor->surname,
                     'name' => $arr->visitor->name,
-                    'time' => $arr->in_time,
+                    'time' => Carbon::createFromFormat('H:i:s', $arr->in_time)->setTimezone('Europe/Moscow')->isoFormat('HH:mm'),
                     'phone' => $arr->visitor->phone
                 ];
         }
@@ -177,8 +178,8 @@ class VisitorController extends Controller
             'visitor' => $printData->visitor->surname . ' ' . mb_substr($printData->visitor->name, 0, 1) . '. ' . mb_substr($printData->visitor->patronymic, 0, 1) . '.',
             'firm' => $printData->visitor->firm->name,
             'employee' => $printData->employee->surname . ' ' . mb_substr($printData->employee->name, 0, 1) . '. ' . mb_substr($printData->employee->patronymic, 0, 1) . '.',
-            'date' => $printData->currentdate->currentdate,
-            'time' => $printData->in_time,
+            'date' => Carbon::createFromFormat('Y-m-d', $printData->currentdate->currentdate)->format('d/m/Y'),
+            'time' => Carbon::createFromFormat('H:i:s', $printData->in_time)->setTimezone('Europe/Moscow')->isoFormat('HH:mm'),
             'security' => $printData->security->name
         ];
 
@@ -194,6 +195,10 @@ class VisitorController extends Controller
     public function exit(Request $request) {
         $exitPeople = Incomevisitor::where('id', '=', $request->id)->first();
 
+        $exitCard = Card::where('id', $exitPeople->card->id)->first();
+        $exitCard->status = false;
+        $exitCard->save();
+        
         if($request->out_time !== null) {
             $exitPeople->out_time = $request->out_time;
         } else {
@@ -201,6 +206,7 @@ class VisitorController extends Controller
         }
         
         $exitPeople->save();
+
         return redirect()->route('visitor-index');
     }
 

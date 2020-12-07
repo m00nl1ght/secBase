@@ -25,5 +25,7 @@
         </div>
     </div>
     
-    <button type="submit" class="btn btn-warning mt-3">Изменить</button>
+    <div class="row justify-content-end mb-4">
+        <button type="submit" class="btn btn-warning mt-3">Изменить</button>
+    </div>
 </form>

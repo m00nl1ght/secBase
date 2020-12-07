@@ -13,7 +13,9 @@
     @if($page == 'new')
         @include('includes.fault.new')
     @elseif($page == 'index')
-        @include('includes.fault.index')   
+        @include('includes.fault.index')
+    @elseif($page == 'edit')
+        @include('includes.fault.edit')
     @endif
 
 @endsection

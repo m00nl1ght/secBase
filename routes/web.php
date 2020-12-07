@@ -58,7 +58,9 @@ Route::post('/incomecard/update/{id}', 'IncomeCardController@update')->name('inc
 Route::get('/fault/new', 'FaultController@create')->name('fault-new');
 Route::post('/fault/submit', 'FaultController@store')->name('fault-add-form');
 Route::get('/fault/index', 'FaultController@index')->name('fault-index');
+Route::get('/fault/edit/{id}', 'FaultController@edit')->name('fault-edit');
 Route::post('/fault/update/{id}', 'FaultController@update')->name('fault-update');
+Route::post('/fault/close/{id}', 'FaultController@close')->name('fault-close');
 
 // Route::get('/incident/new', function () {
 //     return view('incident')->with('page', 'new');
